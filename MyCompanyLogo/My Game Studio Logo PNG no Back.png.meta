@@ -1,0 +1,804 @@
+fileFormatVersion: 2
+guid: 520cd609c43e7c74a85f5782f17100d3
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 108, y: 235, z: 109, w: 47}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_0
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 373
+        width: 111
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1adf6d5ff75722e4a938f60067e91abf
+      internalID: -1499156730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_1
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 317
+        width: 65
+        height: 113
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f799a6ca93ae0744ab966012a271785f
+      internalID: 1234895538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_2
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 307
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89271fbed1e1f524f8cfa5afdcbc7a14
+      internalID: -623337637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_3
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 286
+        width: 102
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5645976b9eaabfc4b97be64569c679de
+      internalID: -65375871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_4
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 250
+        width: 69
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95cc9b16ddb342b48b0670323a148871
+      internalID: -995205149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_5
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 250
+        width: 69
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 239cc4bdc8d173e4d8a18f8e2c469b46
+      internalID: 259266725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_6
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 285
+        width: 103
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60f9b9a0c39ba5e43ac4452948ea96b4
+      internalID: -1320389295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_7
+      rect:
+        serializedVersion: 2
+        x: 359
+        y: 307
+        width: 28
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be39d059099d4b0469c3a883c0bd007a
+      internalID: 368143149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_8
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 256
+        width: 44
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d615a9d1eeba71e4eb836fc003470bbd
+      internalID: 999771505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_9
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 256
+        width: 44
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58ab338fbeb48d244a4ffe3b2cd684cb
+      internalID: 1453321868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_10
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 135
+        width: 28
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aaab2a24741a89f49b63902e466be753
+      internalID: 1882276572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_11
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 135
+        width: 29
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0fa74532b84be9a45b7d0c1856040e79
+      internalID: -2014650713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_12
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 135
+        width: 27
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 380832880c4add149a055c4e720e103c
+      internalID: 1310787405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_13
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 135
+        width: 51
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90c94613f29cd094cb84718d31c27761
+      internalID: 1700537285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_14
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 135
+        width: 26
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 224e1706f8dab35439e09ae901c41201
+      internalID: 1567365162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_15
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 135
+        width: 27
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f24f3ba926481741af4e831899d45e8
+      internalID: 495784054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_16
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 135
+        width: 28
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4497a0a3cc45ac042acf97e1e59c0084
+      internalID: 1593308140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_17
+      rect:
+        serializedVersion: 2
+        x: 269
+        y: 135
+        width: 27
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be5ac369250da3449b1da762b74fca13
+      internalID: 1624345563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_18
+      rect:
+        serializedVersion: 2
+        x: 297
+        y: 135
+        width: 55
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad76886ffee82b44bb1a1d619acfef42
+      internalID: 152561875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_19
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 135
+        width: 12
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be38d78716db14c45a0f64f74a407122
+      internalID: 1451129043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_20
+      rect:
+        serializedVersion: 2
+        x: 365
+        y: 135
+        width: 26
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 917caa447d1c127408348a982ccbf088
+      internalID: 6267040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_21
+      rect:
+        serializedVersion: 2
+        x: 391
+        y: 135
+        width: 29
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7db6a2381b9c2c4cacf0ef5bc8f42b0
+      internalID: 896320253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_22
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 135
+        width: 28
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdc8dda818a657b4cb49b7a67d0a27e1
+      internalID: 172472357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_23
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 61
+        width: 26
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab20b44b2a37fb54bb74788b177f91b5
+      internalID: -1484372514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_24
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 61
+        width: 31
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26cf63c21f300834d85ede5260a723ec
+      internalID: 1803925404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_25
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 61
+        width: 33
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e7d035a42c59e44ca01bdec92820431
+      internalID: -1254222203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_26
+      rect:
+        serializedVersion: 2
+        x: 269
+        y: 61
+        width: 27
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d29acfa7e85f2cf4589cb88c77feb16c
+      internalID: 326222449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_27
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 61
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a639c42f1d88db842a5d6d571fb865e3
+      internalID: 1642192064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: My Game Studio Logo PNG no Back_28
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 236
+        width: 308
+        height: 226
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 407d0f3b2652fd049ae1ed7c76a82efe
+      internalID: -2035654548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 1537655665
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      My Game Studio Logo PNG no Back_0: -1499156730
+      My Game Studio Logo PNG no Back_1: 1234895538
+      My Game Studio Logo PNG no Back_10: 1882276572
+      My Game Studio Logo PNG no Back_11: -2014650713
+      My Game Studio Logo PNG no Back_12: 1310787405
+      My Game Studio Logo PNG no Back_13: 1700537285
+      My Game Studio Logo PNG no Back_14: 1567365162
+      My Game Studio Logo PNG no Back_15: 495784054
+      My Game Studio Logo PNG no Back_16: 1593308140
+      My Game Studio Logo PNG no Back_17: 1624345563
+      My Game Studio Logo PNG no Back_18: 152561875
+      My Game Studio Logo PNG no Back_19: 1451129043
+      My Game Studio Logo PNG no Back_2: -623337637
+      My Game Studio Logo PNG no Back_20: 6267040
+      My Game Studio Logo PNG no Back_21: 896320253
+      My Game Studio Logo PNG no Back_22: 172472357
+      My Game Studio Logo PNG no Back_23: -1484372514
+      My Game Studio Logo PNG no Back_24: 1803925404
+      My Game Studio Logo PNG no Back_25: -1254222203
+      My Game Studio Logo PNG no Back_26: 326222449
+      My Game Studio Logo PNG no Back_27: 1642192064
+      My Game Studio Logo PNG no Back_28: -2035654548
+      My Game Studio Logo PNG no Back_3: -65375871
+      My Game Studio Logo PNG no Back_4: -995205149
+      My Game Studio Logo PNG no Back_5: 259266725
+      My Game Studio Logo PNG no Back_6: -1320389295
+      My Game Studio Logo PNG no Back_7: 368143149
+      My Game Studio Logo PNG no Back_8: 999771505
+      My Game Studio Logo PNG no Back_9: 1453321868
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
