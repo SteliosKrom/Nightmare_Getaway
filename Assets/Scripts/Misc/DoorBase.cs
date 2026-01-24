@@ -24,13 +24,6 @@ public class DoorBase : MonoBehaviour, IInteractable
     [Header("ANIMATIONS")]
     public Animator doorAnimator;
 
-    [Header("AUDIO")]
-    [SerializeField] private AudioSource doorOpenedAudioSource;
-    [SerializeField] private AudioSource doorClosedAudioSource;
-
-    [SerializeField] private AudioClip doorOpenedAudioClip;
-    [SerializeField] private AudioClip doorClosedAudioClip;
-
     public void Start()
     {
         currentDoorState = DoorStates.isIdle;
@@ -60,12 +53,10 @@ public class DoorBase : MonoBehaviour, IInteractable
         if (currentDoorState == DoorStates.isIdle || currentDoorState == DoorStates.isClosed)
         {
             OpenDoor();
-            AudioManager.Instance.PlaySFX(doorOpenedAudioSource, doorOpenedAudioClip);
         }
         else if (currentDoorState == DoorStates.isOpened)
         {
             CloseDoor();
-            AudioManager.Instance.PlaySFX(doorClosedAudioSource, doorClosedAudioClip);
         }
         StartCoroutine(InteractionDelay());
     }
@@ -76,6 +67,7 @@ public class DoorBase : MonoBehaviour, IInteractable
         doorAnimator.SetBool(closeParameter, false);
         doorAnimator.SetBool(idleParameter, false);
         currentDoorState = DoorStates.isOpened;
+        AttachAndPlayOpenDoorAudioSource();
     }
 
     public void CloseDoor()
@@ -84,6 +76,25 @@ public class DoorBase : MonoBehaviour, IInteractable
         doorAnimator.SetBool(closeParameter, true);
         doorAnimator.SetBool(idleParameter, false);
         currentDoorState = DoorStates.isClosed;
+        AttachAndPlayCloseDoorAudioSource();
+    }
+
+    public void AttachAndPlayCloseDoorAudioSource()
+    {
+        AudioManager.Instance.DoorClosed.source.transform.SetParent(transform, true);
+        AudioManager.Instance.DoorClosed.source.transform.localPosition = Vector3.zero;
+
+        AudioManager.Instance.DoorClosed.source.transform.position = AudioManager.Instance.TriggerInteractable3DMusic.transform.position;
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.DoorClosed.source, AudioManager.Instance.DoorClosed.clip);
+    }
+
+    public void AttachAndPlayOpenDoorAudioSource()
+    {
+        AudioManager.Instance.DoorOpened.source.transform.SetParent(transform, true);
+        AudioManager.Instance.DoorOpened.source.transform.localPosition = Vector3.zero;
+
+        AudioManager.Instance.DoorOpened.source.transform.position = AudioManager.Instance.TriggerInteractable3DMusic.transform.position;
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.DoorOpened.source, AudioManager.Instance.DoorOpened.clip);
     }
 
     private IEnumerator InteractionDelay()

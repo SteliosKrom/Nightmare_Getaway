@@ -15,6 +15,8 @@ public class AudioManager : MonoBehaviour
     }
 
     [SerializeField] private AudioItem flashlightFlicker;
+    [SerializeField] private AudioItem doorOpened;
+    [SerializeField] private AudioItem doorClosed;
     [SerializeField] private AudioItem lockedDoor;
     [SerializeField] private AudioItem hover;
     [SerializeField] private AudioItem ligthSwitches;
@@ -37,7 +39,8 @@ public class AudioManager : MonoBehaviour
     public AudioItem FlashlightFlicker => flashlightFlicker; public AudioItem LockedDoor => lockedDoor;
     public AudioItem Hover => hover; public AudioItem LightSwitches => ligthSwitches;
     public AudioItem EquipItem => equipItem; public AudioItem PlaceItem => placeItem;
-    public AudioItem CollectNote => collectNote;
+    public AudioItem CollectNote => collectNote; public AudioItem DoorOpened => doorOpened;
+    public AudioItem DoorClosed => doorClosed;
 
     public GameObject TriggerInteractable3DMusic => triggerInteractable3DAudio;
 

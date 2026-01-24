@@ -3,7 +3,6 @@ using UnityEngine;
 
 public partial class Interactor
 {
-    // --- Unified Door Mapping ---
     private readonly Dictionary<string, int> doorColliderMapping = new()
     {
         {"SecondBedroomDoor", 4},
@@ -17,7 +16,6 @@ public partial class Interactor
         {"MainDoor", 15}
     };
 
-    // --- Main entry for handling any interactable object ---
     public void HandleInteractableGameObject(IInteractable interactableObj)
     {
         switch (interactableObj)
@@ -63,8 +61,6 @@ public partial class Interactor
         StartCoroutine(ToggleDelay());
     }
 
-
-    // --- Handle Doors ---
     private void HandleDoor(DoorBase doorBase)
     {
         string tag = doorBase.gameObject.tag;
@@ -75,7 +71,6 @@ public partial class Interactor
             return;
         }
 
-        // Check if door is locked based on your current game state
         bool isLocked = tag switch
         {
             "KidsDoor" => RoundManager.Instance.CurrentKidsDoorState != KidsDoorState.unlocked,
@@ -100,19 +95,9 @@ public partial class Interactor
             HUD.Instance.InteractIcon.SetActive(true);
             HUD.Instance.DotIcon.SetActive(false);
         }
-
-        // Interact with the door and handle colliders
         InteractWithDoor(doorBase, colliderIndex);
-
-        // Move door audio sources to proper position
-        if (interactableObjects.Count > colliderIndex)
-        {
-            closedDoorAudioSourceObject.transform.position = interactableObjects[colliderIndex].transform.position;
-            openedDoorAudioSourceObject.transform.position = interactableObjects[colliderIndex].transform.position;
-        }
     }
 
-    // --- Handle Door Interaction with Colliders ---
     private void InteractWithDoor(DoorBase doorBase, int colliderIndex)
     {
         doorBase.OnDoorInteract();
@@ -120,7 +105,6 @@ public partial class Interactor
         StartCoroutine(doorHandleCollidersDelay(doorHandleColliders[colliderIndex]));
     }
 
-    // --- Handle Collectable Items ---
     private void HandleCollectableItem(Interactable interactable)
     {
         bool hasCrucifix = RoundManager.Instance.CurrentItemState == ItemState.cross;
