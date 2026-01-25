@@ -149,7 +149,6 @@ public partial class Interactor : MonoBehaviour
 
     public GameObject NoteMenu => noteMenu;
     public GameObject LockedMessagePanel => lockedMessagePanel;
-
     public bool HasFlashlight => hasFlashlight;
     public bool CanToggle { get => canToggle; set => canToggle = value; }
 
