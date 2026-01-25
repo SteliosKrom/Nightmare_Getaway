@@ -1,9 +1,15 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public partial class Interactor
 {
     private bool lockedCoroutineIsRunning = false;
+
+    private string[] doorTags =
+    {
+        "KidsDoor, BathroomDoor, SecondBathroomDoor, SecondBedroomDoor, GarageDoor, BedroomDoor, ClothingsDoor"
+    };
 
     private IEnumerator ToggleDelay()
     {
@@ -53,15 +59,7 @@ public partial class Interactor
 
     public IEnumerator DoorCollidersDelay(BoxCollider collider)
     {
-        if (collider.CompareTag("KidsDoor")
-            || collider.CompareTag("BathroomDoor") || collider.CompareTag("SecondBathroomDoor")
-            || collider.CompareTag("SecondBedroomDoor") || collider.CompareTag("GarageDoor"))
-        {
-            collider.enabled = false;
-            yield return new WaitForSeconds(doorCollidersDelay);
-            collider.enabled = true;
-        }
-        else if (collider.CompareTag("BedroomDoor") || collider.CompareTag("ClothingsDoor"))
+        if (doorTags.Contains(collider.tag))
         {
             collider.enabled = false;
             yield return new WaitForSeconds(doorCollidersDelay);
@@ -71,15 +69,7 @@ public partial class Interactor
 
     public IEnumerator doorHandleCollidersDelay(BoxCollider collider)
     {
-        if (collider.CompareTag("KidsDoor")
-            || collider.CompareTag("BathroomDoor") || collider.CompareTag("SecondBathroomDoor")
-            || collider.CompareTag("SecondBedroomDoor") || collider.CompareTag("GarageDoor"))
-        {
-            collider.enabled = false;
-            yield return new WaitForSeconds(doorCollidersDelay);
-            collider.enabled = true;
-        }
-        else if (collider.CompareTag("BedroomDoor") || collider.CompareTag("ClothingsDoor"))
+        if (doorTags.Contains(collider.tag))
         {
             collider.enabled = false;
             yield return new WaitForSeconds(doorCollidersDelay);

@@ -240,7 +240,6 @@ public partial class Interactor
         }
     }
 
-    // --- Utility ---
     private void PlayLightSFX()
     {
         AudioManager.Instance.LightSwitches.source.transform.position = AudioManager.Instance.TriggerInteractable3DMusic.transform.position;
