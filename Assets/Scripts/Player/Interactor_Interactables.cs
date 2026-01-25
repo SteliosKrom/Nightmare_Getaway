@@ -42,21 +42,22 @@ public partial class Interactor
     {
         string tag = switchObj.tag;
 
-        if (tag == "KidRoomSwitch" || tag == "Switches")
+        switch (tag)
         {
-            kidRoomLight.enabled = !kidRoomLight.enabled;
-            kidsRoomVolume.SetActive(kidRoomLight.enabled);
-            PlayLightSFX();
-        }
-        else if (tag == "GarageSwitch")
-        {
-            isToggled = !isToggled;
-            garageLightAnimator.SetBool("IsOn", isToggled);
-
-            if (!isToggled)
-                StartCoroutine(GarageLightBreakDelay());
-
-            PlayLightSFX();
+            case "KidRoomSwitch":
+                kidRoomLight.enabled = !kidRoomLight.enabled;
+                kidsRoomVolume.SetActive(kidRoomLight.enabled);
+                PlayLightSFX();
+                break;
+            case "Switches":
+                PlayLightSFX();
+                break;
+            case "GarageSwitch":
+                isToggled = !isToggled;
+                garageLightAnimator.SetBool("IsOn", isToggled);
+                if (!isToggled) StartCoroutine(GarageLightBreakDelay());
+                PlayLightSFX();
+                break;
         }
         StartCoroutine(ToggleDelay());
     }
