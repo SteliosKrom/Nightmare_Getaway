@@ -5,9 +5,6 @@ public class Flashlight : MonoBehaviour
 { 
     public bool isOn = false;
 
-    [Header("UI")]
-    [SerializeField] private Image flashlightImage;
-
     [Header("GAME OBJECTS")]
     [SerializeField] private GameObject flashlight;
     public GameObject flashlightAudioSourceObj;
@@ -25,13 +22,11 @@ public class Flashlight : MonoBehaviour
         {
             newLight.enabled = true;
             isOn = true;
-            flashlightImage.color = Color.red;
         }
         else
         {
             newLight.enabled = false;
             isOn = false;
-            flashlightImage.color = Color.white;
         }
         flashlightAudioSource.PlayOneShot(flashlightAudioClip);
     }

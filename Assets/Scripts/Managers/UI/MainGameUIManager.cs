@@ -158,6 +158,7 @@ public class MainGameUIManager : MonoBehaviour
     {
         yield return new WaitForSeconds(noteInputMenuDelay);
         RoundManager.Instance.CurrentGameState = GameState.OnPlaying;
+        RoundManager.Instance.CurrentMenuState = MenuState.None;
         interactor.NoteMenu.SetActive(false);
     }
 }

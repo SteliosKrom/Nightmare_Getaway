@@ -6,7 +6,7 @@ public class FPScounter : MonoBehaviour
     public TextMeshProUGUI fpsText;
     public GameObject fps;
 
-    public int frameCount = 0;
+    public float frameCount = 0;
     public float elapsedTime = 0f;
     private const float updateInterval = 1f;
 
@@ -17,45 +17,17 @@ public class FPScounter : MonoBehaviour
 
     public void CountFPS()
     {
-        switch (RoundManager.Instance.CurrentGameState)
-        {
-            case GameState.OnPlaying:
-                FPSCalculation();
-                break;
-            case GameState.OnPause:
-                PauseFPSCalculation();
-                break;
-        }
-
-        switch (RoundManager.Instance.CurrentMenuState)
-        {
-            case MenuState.OnMainMenu:
-            case MenuState.OnGameSettings:
-            case MenuState.OnMenuSettings:
-                FPSCalculation();
-                break;
-        }
-    }
-
-    public void FPSCalculation()
-    {
-        frameCount++;
-        elapsedTime += Time.deltaTime;
+        frameCount = 1f / Time.unscaledDeltaTime;
+        elapsedTime += Time.unscaledDeltaTime;
 
         if (elapsedTime >= updateInterval)
         {
-            float fps = frameCount / elapsedTime;
-            fpsText.text = "" + Mathf.Ceil(fps).ToString();
+            if (frameCount >= 999)
+                fpsText.text = "999+";
+            else
+                fpsText.text = frameCount.ToString("0");
 
-            frameCount = 0;
-            elapsedTime = 0f;
+            elapsedTime = 0;
         }
-    }
-
-    public void PauseFPSCalculation()
-    {
-        frameCount = 0;
-        elapsedTime = 0f;
-        fpsText.text = "0";
     }
 }

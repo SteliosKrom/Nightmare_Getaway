@@ -1,52 +1,8 @@
 using UnityEngine;
 
-public enum GameState
-{
-    None,
-    OnPlaying,
-    OnPause,
-    OnIntro,
-}
 
-public enum MenuState
-{
-    None,
-    OnMenuSettings,
-    OnGameSettings,
-    OnCategorySettings,
-    OnMainMenu,
-    OnNoteMenu,
-    OnPauseMenu,
-    OnTitleMenu,
-    OnInventoryMenu,
-}
-
-public enum PlayerState
-{
-    OnWalking,
-    OnRunning,
-    OnCrouching,
-    OnIdle
-}
-
-public enum EnvironmentState
-{
-    OnOutdoors,
-    OnIndoors,
-    none
-}
-
-public enum ItemState
-{
-    kidsRoomKey,
-    garageKey,
-    mainDoorKey,
-    book,
-    knife,
-    cross,
-    none
-}
-
+// Just add is locked boolean variable to the door class and control the state for each door seperately
+// ... My eyes hurt!!
 public enum KidsDoorState
 {
     unlocked,

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviour
 {
-    private float pauseDelay = 0.5f;
+    private float pauseDelay = 0.15f;
 
     #region SCRIPT REFERENCES
     [Header("SCRIPT REFERENCES")]
@@ -197,6 +197,7 @@ public class PauseManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         resumed = true;
+
         RoundManager.Instance.CurrentGameState = GameState.OnPlaying;
         RoundManager.Instance.CurrentMenuState = MenuState.None;
     }
