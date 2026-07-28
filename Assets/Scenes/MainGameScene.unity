@@ -1305,7 +1305,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f137e4e2f563834dac59b70f11507fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isWaitingForKey: 0
   moveForwardText: {fileID: 708003408}
   moveBackwardText: {fileID: 990095536}
   moveLeftText: {fileID: 1318327944}
@@ -15396,7 +15395,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 922ed8d87a93d714885e85224f8b76d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  holdThreshold: 0.1
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -15559,12 +15557,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad98974e125ac3d499138968c395dcfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clockAudioSource: {fileID: 1221405377}
-  clockAudioLowPassFilter: {fileID: 1221405378}
-  clockAudioClip: {fileID: 8300000, guid: d429cedd3d8921e419693b148fbea195, type: 3}
   groundLayer:
     serializedVersion: 2
     m_Bits: 0
+  clockAudioSource: {fileID: 1221405377}
+  clockAudioLowPassFilter: {fileID: 1221405378}
+  clockAudioClip: {fileID: 8300000, guid: d429cedd3d8921e419693b148fbea195, type: 3}
 --- !u!82 &379504552
 AudioSource:
   m_ObjectHideFlags: 0
@@ -15674,12 +15672,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dece41676589fef4799367819b17939b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ceilingFanAudioLowPassFilter: {fileID: 1408288393}
-  ceilingFanAudioSource: {fileID: 1408288392}
-  ceilingFanAudioClip: {fileID: 8300000, guid: 8d2f02e234d540543a132ce883750754, type: 3}
   groundLayer:
     serializedVersion: 2
     m_Bits: 0
+  ceilingFanAudioLowPassFilter: {fileID: 1408288393}
+  ceilingFanAudioSource: {fileID: 1408288392}
+  ceilingFanAudioClip: {fileID: 8300000, guid: 8d2f02e234d540543a132ce883750754, type: 3}
 --- !u!114 &379504554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51156,7 +51154,7 @@ GameObject:
   - component: {fileID: 1570067287}
   - component: {fileID: 1570067288}
   m_Layer: 0
-  m_Name: RoundManager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51186,12 +51184,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1570067286}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 409cefca0141354458be6b8633a40b55, type: 3}
+  m_Script: {fileID: 11500000, guid: ad72d95e8832c8e4c855156483e43c91, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
   currentGameState: 0
   currentMenuState: 0
-  currentPlayerState: 3
+  currentPlayerState: 0
   currentEnvironmentState: 0
   currentItemState: 0
   currentKidsDoorState: 0

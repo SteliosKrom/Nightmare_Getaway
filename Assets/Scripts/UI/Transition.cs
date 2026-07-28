@@ -1,43 +1,36 @@
 using System.Collections;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class Transition : MonoBehaviour
 {
-    public static Transition Instance;
-
-    [Header("GENERAL")]
     private float splashScreenDelay = 6f;
     private float titleMenuAnimationsDelay = 2f;
 
     private bool isOnBrightnessPanel = true;
     public bool mainGameHasLoaded = false;
 
-    [Header("GAME OBJECTS")]
+    #region SERVICES
+    private GameManager gameManager;
+    #endregion
+
+    #region OBJECTS
+    [Header("OBJECTS")]
     [SerializeField] private GameObject headsetPanel;
     [SerializeField] private GameObject seizurePanel;
     [SerializeField] private GameObject brightnessCalibrationPanelLogo;
     [SerializeField] private GameObject brightnessCalibrationPanelUI;
+    #endregion
 
+    #region ANIMATIONS
     [Header("ANIMATIONS")]
-     private Animator pressAnyKeyToStartAnimator;
-     private Animator titleMenuAnimator;
+    private Animator pressAnyKeyToStartAnimator;
+    private Animator titleMenuAnimator;
+    #endregion
 
     private void Awake()
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(transform.root.gameObject);
-        }
+        DontDestroyOnLoad(transform.root.gameObject);
 
         if (!PlayerPrefs.HasKey("GraphicsQuality"))
         {
@@ -50,10 +43,14 @@ public class Transition : MonoBehaviour
 
     private void Start()
     {
+        gameManager = ServiceManager.GetService<GameManager>();
+
         mainGameHasLoaded = false;
         isOnBrightnessPanel = false;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
         StartCoroutine(ShowSplashScreens());
     }
 
@@ -99,13 +96,18 @@ public class Transition : MonoBehaviour
     {
         titleMenuAnimator.SetBool("IsFadingIn", false);
         pressAnyKeyToStartAnimator.SetBool("IsFadingIn", false);
+
         yield return new WaitForSeconds(titleMenuAnimationsDelay);
+
         titleMenuAnimator.SetBool("IsFadingIn", true);
         pressAnyKeyToStartAnimator.SetBool("IsFadingIn", true);
+
         yield return new WaitForSeconds(titleMenuAnimationsDelay);
+
         titleMenuAnimator.SetBool("IsOn", true);
         pressAnyKeyToStartAnimator.SetBool("IsFading", true);
-        RoundManager.Instance.CurrentMenuState = MenuState.OnTitleMenu;
+
+        gameManager.CurrentMenuState = MenuState.OnTitleMenu;
     }
 
     public IEnumerator ShowSplashScreens()

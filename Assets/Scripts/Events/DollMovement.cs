@@ -15,6 +15,10 @@ public class DollMovement : MonoBehaviour
     private bool hasTriggered = false;
     #endregion
 
+    #region SERVICES
+    private AudioManager audioManager;
+    #endregion
+
     #region SCRIPT REFERENCES
     [Header("SCRIPT REFERENCES")]
     [SerializeField] private TriggerFlickering triggerFlickering;
@@ -60,7 +64,7 @@ public class DollMovement : MonoBehaviour
 
             if (footstepsTimer >= stepInterval)
             {
-                AudioManager.Instance.PlaySFX(dollFootstepsAudioSource, dollFootstepsAudioClip);
+                audioManager.PlaySFX(dollFootstepsAudioSource, dollFootstepsAudioClip);
                 dollFootstepsAudioSource.pitch = Random.Range(0.25f, 0.75f);
                 footstepsTimer = 0f;
             }

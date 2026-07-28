@@ -14,6 +14,10 @@ public class CreepyEntityMovement : MonoBehaviour
     private bool hasTriggered = false;
     #endregion
 
+    #region SERVICES
+    private AudioManager audioManager;
+    #endregion
+
     #region SCRIPT REFERENCES
     [Header("SCRIPT REFERENCES")]
     [SerializeField] private Interactor interactor;
@@ -51,6 +55,11 @@ public class CreepyEntityMovement : MonoBehaviour
     private float flickerDelay = 5f;
     #endregion
 
+    private void Start()
+    {
+        audioManager = ServiceManager.GetService<AudioManager>();
+    }
+
     private void Update()
     {
         if (hasTriggered) return;
@@ -62,9 +71,10 @@ public class CreepyEntityMovement : MonoBehaviour
             hasTriggered = true;
             interactor.CanToggle = false;
 
-            AudioManager.Instance.StopSound(heartbeatGameAudioSource);
-            AudioManager.Instance.PlaySFX(creepyEntityStressSFX, creepyEntityStressSFXClip);
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.FlashlightFlicker.source, AudioManager.Instance.FlashlightFlicker.clip);
+            audioManager.StopSound(heartbeatGameAudioSource);
+
+            audioManager.PlaySFX(creepyEntityStressSFX, creepyEntityStressSFXClip);
+            audioManager.PlaySFX(audioManager.FlashlightFlicker.source, audioManager.FlashlightFlicker.clip);
 
             InvokeRepeating("TriggerFlicker", 0f, flickerSpeed);
             MoveEntity();
@@ -85,13 +95,16 @@ public class CreepyEntityMovement : MonoBehaviour
     {
         flashlight.intensity = Random.Range(minIntensity, maxIntensity);
         flashlight.enabled = true;
-        AudioManager.Instance.StopSound(heartbeatGameAudioSource);
+        audioManager.StopSound(heartbeatGameAudioSource);
 
         yield return new WaitForSeconds(flickerDelay);
 
         flashlight.intensity = 75f;
         CancelInvoke();
-        AudioManager.Instance.MainGameAudioSource.volume = Mathf.Lerp(AudioManager.Instance.MainGameAudioSource.volume, 0.1f, 2f * Time.deltaTime);
+
+        audioManager.MainGameAudioSource.volume = Mathf.Lerp(audioManager.MainGameAudioSource.volume, 
+            0.1f, 2f * Time.deltaTime);
+
         interactor.CanToggle = true;
     }
 
@@ -108,7 +121,7 @@ public class CreepyEntityMovement : MonoBehaviour
 
             if (footstepsTimer >= stepInterval)
             {
-                AudioManager.Instance.PlaySFX(creepyEntityFootstepsAudioSource, creepyEntityFootstepsAudioClip);
+                audioManager.PlaySFX(creepyEntityFootstepsAudioSource, creepyEntityFootstepsAudioClip);
                 creepyEntityFootstepsAudioSource.pitch = Random.Range(0.25f, 0.75f);
                 footstepsTimer = 0f;
             }

@@ -21,12 +21,10 @@ public enum MainDoorState
     locked
 }
 
-class RoundManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
-    [Header("SCRIPT REFERENCES")]
-    public static RoundManager Instance;
-
-    [Header("GAME STATES")]
+    #region STATES
+    [Header("STATES")]
     [SerializeField] private GameState currentGameState;
     [SerializeField] private MenuState currentMenuState;
     [SerializeField] private PlayerState currentPlayerState;
@@ -35,27 +33,29 @@ class RoundManager : MonoBehaviour
     [SerializeField] private KidsDoorState currentKidsDoorState;
     [SerializeField] private GarageDoorState currentGarageDoorState;
     [SerializeField] private MainDoorState currentMainDoorState;
+    #endregion
 
+    #region PROPERTIES
     public GameState CurrentGameState { get => currentGameState; set => currentGameState = value; }
     public MenuState CurrentMenuState { get => currentMenuState; set => currentMenuState = value; }
     public PlayerState CurrentPlayerState { get => currentPlayerState; set => currentPlayerState = value; }
-    public EnvironmentState CurrentEnvironmentState { get => currentEnvironmentState; set => currentEnvironmentState = value; }
+    public EnvironmentState CurrentEnvironmentState 
+    { 
+        get => currentEnvironmentState; 
+        set => currentEnvironmentState = value;
+    }
     public ItemState CurrentItemState { get => currentItemState; set => currentItemState = value; }
     public KidsDoorState CurrentKidsDoorState { get => currentKidsDoorState; set => currentKidsDoorState = value; }
-    public GarageDoorState CurrentGarageDoorState { get => currentGarageDoorState; set => currentGarageDoorState = value; }
+    public GarageDoorState CurrentGarageDoorState 
+    { 
+        get => currentGarageDoorState; 
+        set => currentGarageDoorState = value; 
+    }
     public MainDoorState CurrentMainDoorState { get => currentMainDoorState; set => currentMainDoorState = value; }
-
+    #endregion
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Debug.Log("Game object" + name + "is not found");
-            return;
-        }
+        ServiceManager.RegisterService<GameManager>(this);
     }
 
     private void Start()

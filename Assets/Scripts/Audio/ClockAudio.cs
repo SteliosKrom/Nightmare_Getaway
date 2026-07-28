@@ -2,20 +2,28 @@ using UnityEngine;
 
 public class ClockAudio : MonoBehaviour
 {
+    public LayerMask groundLayer;
+
+    #region SERVICES
+    private AudioManager audioManager;
+    private GameManager gameManager;
+    #endregion
+
+    #region AUDIO
     [Header("AUDIO")]
     public AudioSource clockAudioSource;
     public AudioLowPassFilter clockAudioLowPassFilter;
     public AudioClip clockAudioClip;
-    public LayerMask groundLayer;
+    #endregion
 
     private void Start()
     {
-        AudioManager.Instance.StopSound(clockAudioSource);
+        audioManager.StopSound(clockAudioSource);
     }
 
     private void Update()
     {
-        if (RoundManager.Instance.CurrentGameState == GameState.OnPlaying)
+        if (gameManager.CurrentGameState == GameState.OnPlaying)
         {
             if (IsPlayerOnGround())
             {
@@ -31,7 +39,7 @@ public class ClockAudio : MonoBehaviour
             }
 
             if (!clockAudioSource.isPlaying)
-                AudioManager.Instance.PlaySFX(clockAudioSource, clockAudioClip);
+                audioManager.PlaySFX(clockAudioSource, clockAudioClip);
         }
     }
 

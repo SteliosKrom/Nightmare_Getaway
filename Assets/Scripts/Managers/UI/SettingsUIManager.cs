@@ -1,12 +1,13 @@
 using DG.Tweening;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SettingsUIManager : MonoBehaviour
 {
-    public static SettingsUIManager Instance;
+    #region SERVICES
+    private GameManager gameManager;
+    #endregion
 
     #region SCRIPT REFERENCES
     [Header("SCRIPT REFERENCES")]
@@ -48,6 +49,7 @@ public class SettingsUIManager : MonoBehaviour
     [SerializeField] private Button[] settingsCategoryButtons;
     #endregion
 
+    #region PROPERTIES
     public GameObject SettingsMenu => settingsMenu;
     public GameObject GetBackToMenu => backToMenu;
     public GameObject GetBackToSettings => backToSettings;
@@ -56,18 +58,16 @@ public class SettingsUIManager : MonoBehaviour
 
     public Button GetBackToSettingsButton => backToSettingsButton;
     public Button GetBackToSettingsFromGameButton => backToSettingsFromGameButton;
+    #endregion
+
+    private void Awake()
+    {
+        ServiceManager.RegisterService<SettingsUIManager>(this);
+    }
 
     private void Start()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Debug.Log("There is a duplicate game object. Destroy it.");
-            Destroy(gameObject);
-        }
+        gameManager = ServiceManager.GetService<GameManager>();
     }
 
     public void OpenAudio()
@@ -76,7 +76,7 @@ public class SettingsUIManager : MonoBehaviour
         DisableRedColorFromSettingsCategories();
 
         OpenCategory(audioMenu);
-        RoundManager.Instance.CurrentMenuState = MenuState.OnCategorySettings;
+        gameManager.CurrentMenuState = MenuState.OnCategorySettings;
     }
 
     public void OpenDisplay()
@@ -85,7 +85,7 @@ public class SettingsUIManager : MonoBehaviour
         DisableRedColorFromSettingsCategories();
 
         OpenCategory(displayMenu);
-        RoundManager.Instance.CurrentMenuState = MenuState.OnCategorySettings;
+        gameManager.CurrentMenuState = MenuState.OnCategorySettings;
     }
 
     public void OpenGraphics()
@@ -94,7 +94,7 @@ public class SettingsUIManager : MonoBehaviour
         DisableRedColorFromSettingsCategories();
 
         OpenCategory(graphicsMenu);
-        RoundManager.Instance.CurrentMenuState = MenuState.OnCategorySettings;
+        gameManager.CurrentMenuState = MenuState.OnCategorySettings;
     }
 
     public void OpenControls()
@@ -103,7 +103,7 @@ public class SettingsUIManager : MonoBehaviour
         DisableRedColorFromSettingsCategories();
 
         OpenCategory(controlsMenu);
-        RoundManager.Instance.CurrentMenuState = MenuState.OnCategorySettings;
+        gameManager.CurrentMenuState = MenuState.OnCategorySettings;
     }
 
     public void OpenCategory(GameObject category)
@@ -111,7 +111,7 @@ public class SettingsUIManager : MonoBehaviour
         settingsMenu.SetActive(false);
         category.SetActive(true);
 
-        switch (RoundManager.Instance.CurrentMenuState)
+        switch (gameManager.CurrentMenuState)
         {
             case MenuState.OnMenuSettings:
                 backToMenu.SetActive(false);
@@ -133,7 +133,8 @@ public class SettingsUIManager : MonoBehaviour
 
         backToMenuText.color = Color.white;
         backToMenuButton.transform.DOScale(3.2f, 0.2f);
-        RoundManager.Instance.CurrentMenuState = MenuState.OnMainMenu;
+
+        gameManager.CurrentMenuState = MenuState.OnMainMenu;
     }
 
     public void BackToSettings()
@@ -146,7 +147,8 @@ public class SettingsUIManager : MonoBehaviour
 
         backToSettingsText.color = Color.white;
         backToSettingsButton.transform.DOScale(3.2f, 0.2f);
-        RoundManager.Instance.CurrentMenuState = MenuState.OnMenuSettings;
+
+        gameManager.CurrentMenuState = MenuState.OnMenuSettings;
     }
 
     public void BackToPauseMenu()
@@ -158,8 +160,9 @@ public class SettingsUIManager : MonoBehaviour
 
         backToPauseMenuText.color = Color.white;
         backToPauseMenuButton.transform.DOScale(3.2f, 0.2f);
-        RoundManager.Instance.CurrentGameState = GameState.OnPause;
-        RoundManager.Instance.CurrentMenuState = MenuState.OnPauseMenu;
+
+        gameManager.CurrentGameState = GameState.OnPause;
+        gameManager.CurrentMenuState = MenuState.OnPauseMenu;
     }
 
     public void BackToSettingsFromGame()
@@ -172,7 +175,7 @@ public class SettingsUIManager : MonoBehaviour
 
         backToSettingsFromGameText.color = Color.white;
         backToSettingsFromGame.transform.DOScale(3.2f, 0.2f);
-        RoundManager.Instance.CurrentMenuState = MenuState.OnGameSettings;
+        gameManager.CurrentMenuState = MenuState.OnGameSettings;
     }
 
     public void HideAllCategories()

@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class DoorKnockTrigger : MonoBehaviour
 {
+    #region SERVICES
+    private AudioManager audioManager;
+    #endregion
+
     #region AUDIO
     [Header("AUDIO SOURCES")]
     [SerializeField] private AudioSource doorKnockAudioSource;
@@ -16,11 +20,16 @@ public class DoorKnockTrigger : MonoBehaviour
     [SerializeField] private GameObject doorKnockTrigger;
     #endregion
 
+    private void Start()
+    {
+        audioManager = ServiceManager.GetService<AudioManager>();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            AudioManager.Instance.PlaySFX(doorKnockAudioSource, doorKnockAudioClip);
+            audioManager.PlaySFX(doorKnockAudioSource, doorKnockAudioClip);
             doorKnockTrigger.SetActive(false);
         }
     }

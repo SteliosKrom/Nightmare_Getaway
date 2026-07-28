@@ -27,7 +27,7 @@ public partial class Interactor
     public IEnumerator HeartbeatAudioDelay()
     {
         yield return new WaitForSeconds(heartbeatAudioDelay);
-        AudioManager.Instance.Play(AudioManager.Instance.HeartbeatAudioSource);
+        audioManager.Play(audioManager.HeartbeatAudioSource);
     }
 
     public IEnumerator PhoneCallDelay()
@@ -42,18 +42,14 @@ public partial class Interactor
         if (lockedCoroutineIsRunning) yield break;
 
         lockedCoroutineIsRunning = true;
-
-        isLocked = true;
         lockedMessagePanel.SetActive(true);
 
-        AudioManager.Instance.LockedDoor.source.transform.position = AudioManager.Instance.TriggerInteractable3DMusic.transform.position;
-        AudioManager.Instance.PlaySFX(AudioManager.Instance.LockedDoor.source, AudioManager.Instance.LockedDoor.clip);
+        audioManager.LockedDoor.source.transform.position = audioManager.TriggerInteractable3DMusic.transform.position;
+        audioManager.PlaySFX(audioManager.LockedDoor.source, audioManager.LockedDoor.clip);
 
         yield return new WaitForSeconds(lockedUIDelay);
 
-        isLocked = false;
         lockedMessagePanel.SetActive(false);
-
         lockedCoroutineIsRunning = false;
     }
 

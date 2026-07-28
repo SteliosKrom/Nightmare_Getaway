@@ -9,13 +9,15 @@ public class TypewriterEffect : MonoBehaviour
 
     [SerializeField] private bool introTitleTextCoroutineRunning = false;
 
+    #region AUDIO
     [Header("AUDIO")]
     [SerializeField] private AudioSource typewriterAudioSource;
-
     [SerializeField] private AudioClip typewriterAudioClip;
+    #endregion
 
+    #region PROPERTIES
     public bool CoroutineIsRunning { get => introTitleTextCoroutineRunning; set => introTitleTextCoroutineRunning = value; }
-
+    #endregion
     // Play sound for each character except spaces
     public IEnumerator PlayStoryIntroTextTypeWriterDelay(TextMeshProUGUI storyIntroText, string fullStoryIntroText)
     {
@@ -31,7 +33,6 @@ public class TypewriterEffect : MonoBehaviour
             }
             yield return new WaitForSecondsRealtime(typingSpeed);
         }
-
         introTitleTextCoroutineRunning = false;
     }
 

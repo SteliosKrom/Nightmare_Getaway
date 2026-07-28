@@ -4,13 +4,17 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
-    private bool isEmpty;
-
     private float inventoryDelay = 1f;
 
     private int nextEmptySlot = 0;
 
     public bool onMenus = false;
+
+    #region SERVICES
+    private AudioManager audioManager;
+    private GameManager gameManager;
+    private KeybindManager keybindManager;
+    #endregion
 
     #region SCRIPT REFERENCES
     [Header("SCRIPT REFERENCES")]
@@ -49,6 +53,10 @@ public class InventoryManager : MonoBehaviour
 
     private void Start()
     {
+        audioManager = ServiceManager.GetService<AudioManager>();
+        gameManager = ServiceManager.GetService<GameManager>();
+        keybindManager = ServiceManager.GetService<KeybindManager>();
+
         InitializeInventorySlots();
         GetCallbackOnInventoryButtons();
         DeactivateAllInventoryItems();
@@ -62,10 +70,7 @@ public class InventoryManager : MonoBehaviour
     public void InitializeInventorySlots()
     {
         foreach (GameObject slot in inventorySlots)
-        {
             slot.SetActive(false);
-            isEmpty = true;
-        }
     }
 
     public void GetCallbackOnInventoryButtons()
@@ -82,7 +87,7 @@ public class InventoryManager : MonoBehaviour
         menu.SetActive(true);
         inventoryItemsMenu.SetActive(false);
         onMenus = true;
-        AudioManager.Instance.PlaySFX(openInventoryItemsAudioSource, openInventoryItemsAudioClip);
+        audioManager.PlaySFX(openInventoryItemsAudioSource, openInventoryItemsAudioClip);
     }
 
     public void AddToInventory(int itemIndex)
@@ -100,28 +105,24 @@ public class InventoryManager : MonoBehaviour
         item.SetActive(true);
 
         nextEmptySlot++;
-        isEmpty = false;
     }
 
     public void InventoryInput()
     {
-        if (RoundManager.Instance.CurrentMenuState == MenuState.OnNoteMenu) return;
-        if (RoundManager.Instance.CurrentGameState != GameState.OnPlaying) return;
+        if (gameManager.CurrentMenuState == MenuState.OnNoteMenu) return;
+        if (gameManager.CurrentGameState != GameState.OnPlaying) return;
 
-        KeyCode inventory = KeybindManager.Instance.ActualKeybinds["Inventory"];
+        KeyCode inventory = keybindManager.ActualKeybinds["Inventory"];
 
         if (!canOpenInventory) return;
 
         if (!Input.GetKeyDown(inventory)) return;
 
-        if (RoundManager.Instance.CurrentMenuState == MenuState.None)
-        {
+        if (gameManager.CurrentMenuState == MenuState.None)
             OpenInventory();
-        }
-        else if (RoundManager.Instance.CurrentMenuState == MenuState.OnInventoryMenu)
-        {
+        else if (gameManager.CurrentMenuState == MenuState.OnInventoryMenu)
             CheckIfOnInventoryMenus();
-        }
+
         StartCoroutine(InventoryDelay());
     }
 
@@ -147,31 +148,29 @@ public class InventoryManager : MonoBehaviour
 
     public void OpenInventory()
     {
-        RoundManager.Instance.CurrentMenuState = MenuState.OnInventoryMenu;
+        gameManager.CurrentMenuState = MenuState.OnInventoryMenu;
         onMenus = false;
         inventoryMenu.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        AudioManager.Instance.PlaySFX(inventoryAudioSource, openInventoryAudioClip);
+        audioManager.PlaySFX(inventoryAudioSource, openInventoryAudioClip);
         HUD.Instance.DisableAllHUDIcons();
     }
 
     public void CloseInventory()
     {
-        RoundManager.Instance.CurrentMenuState = MenuState.None;
+        gameManager.CurrentMenuState = MenuState.None;
         inventoryMenu.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        AudioManager.Instance.PlaySFX(inventoryAudioSource, closeInventoryAudioClip);
+        audioManager.PlaySFX(inventoryAudioSource, closeInventoryAudioClip);
         HUD.Instance.ShowDotOnly();
     }
 
     public void DeactivateAllInventoryItems()
     {
         foreach (GameObject item in inventoryItems)
-        {
             item.SetActive(false);
-        }
     }
 
     public IEnumerator InventoryDelay()

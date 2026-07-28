@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager Instance;
-
+    #region OBJECTS
+    [Header("OBJECTS")]
     [SerializeField] private GameObject triggerInteractable3DAudio;
+    #endregion
 
     [System.Serializable]
     public struct AudioItem
@@ -45,14 +46,7 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Debug.Log("The instance of the object already exists");
-        }
+        ServiceManager.RegisterService<AudioManager>(this);
     }
 
     public void PlaySFX(AudioSource source, AudioClip clip) { source.PlayOneShot(clip); }

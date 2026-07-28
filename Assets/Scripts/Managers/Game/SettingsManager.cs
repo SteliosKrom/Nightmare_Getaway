@@ -10,33 +10,46 @@ using UnityEngine.UI;
 
 public class SettingsManager : MonoBehaviour
 {
+    #region CONSTANTS
     private const string masterVol = "MasterVolume";
     private const string gameVol = "GameVolume";
     private const string sfxVol = "SoundEffectsVolume";
     private const string menuVol = "MenuVolume";
+    #endregion
 
+    #region SERVICES
+    private KeybindManager keybindManager;
+    #endregion
+
+    #region SCRIPT REFERENCES
     [Header("SCRIPT REFERENCES")]
     [SerializeField] private CameraRotate cameraRotate;
+    #endregion
 
+    #region OBJECTS
     [Header("OBJECTS")]
     [SerializeField] private GameObject displayFPS;
+    #endregion
 
     #region UI
-    [Header("UI")]
+    [Header("TOGGLE")]
     [SerializeField] private Toggle fullscreenToggle;
     [SerializeField] private Toggle framesToggle;
     [SerializeField] private Toggle vSyncToggle;
     [SerializeField] private Toggle motionBlurToggle;
 
+    [Header("SLIDER")]
     [SerializeField] private Slider masterVolumeSlider;
     [SerializeField] private Slider gameVolumeSlider;
     [SerializeField] private Slider sfxVolumeSlider;
     [SerializeField] private Slider menuVolumeSlider;
     [SerializeField] private Slider gammaSlider;
 
+    [Header("DROPDOWN")]
     [SerializeField] private TMP_Dropdown antiAliasingDropdown;
     [SerializeField] private TMP_Dropdown qualityDropdown;
 
+    [Header("TEXT")]
     [SerializeField] private TextMeshProUGUI gammaValueText;
     [SerializeField] private TextMeshProUGUI masterValueText;
     [SerializeField] private TextMeshProUGUI sfxValueText;
@@ -46,10 +59,13 @@ public class SettingsManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI framesText;
     #endregion
 
+    #region CAMERAS
     [Header("CAMERAS")]
     [SerializeField] private Camera mainCamera;
     [SerializeField] private Camera secondaryCamera;
+    #endregion
 
+    #region POST-PROCESSING
     [Header("POST-PROCESSING")]
     [SerializeField] private Volume mainCameraVolume;
     [SerializeField] private Volume secondaryCameraVolume;
@@ -57,15 +73,22 @@ public class SettingsManager : MonoBehaviour
     private MotionBlur motionBlur;
     private ColorAdjustments mainCameraVolumeColorAdjustment;
     private ColorAdjustments secondaryCameraVolumeColorAdjustment;
+    #endregion
 
+    #region AUDIO
     [Header("AUDIO")]
     [SerializeField] private AudioMixer myAudioMixer;
+    #endregion
 
+    #region RENDERING
     [Header("RENDERING")]
     [SerializeField] private UniversalRenderPipelineAsset defaultUniversalPipelineAsset;
+    #endregion
 
     private void Start()
     {
+        keybindManager = ServiceManager.GetService<KeybindManager>();
+
         LoadSettings();
     }
 
@@ -165,7 +188,7 @@ public class SettingsManager : MonoBehaviour
 
     public void LoadKeybindTexts()
     {
-        foreach (var pair in KeybindManager.Instance.KeybindsText)
+        foreach (var pair in keybindManager.KeybindsText)
         {
             string action = pair.Key;
 
@@ -175,21 +198,21 @@ public class SettingsManager : MonoBehaviour
             }
             else
             {
-                pair.Value.text = KeybindManager.Instance.KeybindsText[action].text;
+                pair.Value.text = keybindManager.KeybindsText[action].text;
             }
         }
     }
 
     public void LoadActualKeybinds()
     {
-        var keys = new List<string>(KeybindManager.Instance.ActualKeybinds.Keys);
+        var keys = new List<string>(keybindManager.ActualKeybinds.Keys);
 
         foreach (var action in keys)
         {
             if (PlayerPrefs.HasKey(action + "_Key"))
             {
                 string savedKey = PlayerPrefs.GetString(action + "_Key");
-                KeybindManager.Instance.ActualKeybinds[action] = (KeyCode)Enum.Parse(typeof(KeyCode), savedKey);
+                keybindManager.ActualKeybinds[action] = (KeyCode)Enum.Parse(typeof(KeyCode), savedKey);
             }
         }
     }
