@@ -9,6 +9,11 @@ using UnityEngine.UI;
 
 public class AddEventTrigger : MonoBehaviour
 {
+    #region SERVICES
+    private AudioManager audioManager;
+    #endregion
+
+    #region UI
     [Header("TEXT")]
     [SerializeField] private TextMeshProUGUI[] menuButtonTexts;
     [SerializeField] private TextMeshProUGUI[] settingsButtonTexts;
@@ -39,9 +44,12 @@ public class AddEventTrigger : MonoBehaviour
 
     [Header("INVENTORY BUTTONS")]
     [SerializeField] private Button[] itemButtons;
+    #endregion
 
     private void Start()
     {
+        audioManager = ServiceManager.GetService<AudioManager>();
+
         DOTween.Init();
         DOTween.defaultTimeScaleIndependent = true;
 
@@ -70,7 +78,7 @@ public class AddEventTrigger : MonoBehaviour
     public void EnterHoverEffectPause(Transform buttonTransform)
     {
         buttonTransform.DOScale(1f, 0.2f).SetUpdate(true);
-        AudioManager.Instance.PlaySFX(AudioManager.Instance.Hover.source, AudioManager.Instance.Hover.clip); 
+        audioManager.PlaySFX(audioManager.Hover.source, audioManager.Hover.clip); 
     }
 
     public void ExitHoverEffectPause(Transform buttonTransform)
@@ -81,7 +89,7 @@ public class AddEventTrigger : MonoBehaviour
     public void EnterHoverEffectBack(Transform buttonTransform)
     {
         buttonTransform.DOScale(3.5f, 0.2f).SetUpdate(true);
-        AudioManager.Instance.PlaySFX(AudioManager.Instance.Hover.source, AudioManager.Instance.Hover.clip);
+        audioManager.PlaySFX(audioManager.Hover.source, audioManager.Hover.clip);
     }
 
     public void ExitHoverEffectBack(Transform buttonTransform)
@@ -92,7 +100,7 @@ public class AddEventTrigger : MonoBehaviour
     public void EnterHoverEffectOther(Transform buttonTransform)
     {
         buttonTransform.DOScale(3.5f, 0.2f).SetUpdate(true);
-        AudioManager.Instance.PlaySFX(AudioManager.Instance.Hover.source, AudioManager.Instance.Hover.clip);
+        audioManager.PlaySFX(audioManager.Hover.source, audioManager.Hover.clip);
     }
 
     public void ExitHoverEffectOther(Transform buttonTransform)
@@ -103,7 +111,7 @@ public class AddEventTrigger : MonoBehaviour
     public void EnterHoverEffectMenu(Transform buttonTransform)
     {
         buttonTransform.DOScale(1.2f, 0.2f).SetUpdate(true);
-        AudioManager.Instance.PlaySFX(AudioManager.Instance.Hover.source, AudioManager.Instance.Hover.clip);
+        audioManager.PlaySFX(audioManager.Hover.source, audioManager.Hover.clip);
     }
 
     public void ExitHoverSoundEffectMenu(Transform buttonTransform)
@@ -114,7 +122,7 @@ public class AddEventTrigger : MonoBehaviour
     public void EnterHoverSoundEffectSettings(Transform buttonTransform)
     {
         buttonTransform.DOScale(4.5f, 0.2f).SetUpdate(true);
-        AudioManager.Instance.PlaySFX(AudioManager.Instance.Hover.source, AudioManager.Instance.Hover.clip);
+        audioManager.PlaySFX(audioManager.Hover.source, audioManager.Hover.clip);
     }
 
     public void ExitHoverSoundEffectSettings(Transform buttonTransform)

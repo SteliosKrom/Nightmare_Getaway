@@ -2,29 +2,43 @@ using UnityEngine;
 
 public class FootstepsSystem : MonoBehaviour
 {
-    [Header("TYPES")]
-    [SerializeField] private float holdThreshold = 0.1f;
+    private float holdThreshold = 0.1f;
     private float keyHoldTime = 0f;
 
-    [Header("GAME OBJECTS")]
-    [SerializeField] private LayerMask groundLayer;
+    #region SERVICES
+    private GameManager gameManager;
+    private KeybindManager keybindManager;
+    #endregion
 
-    [Header("AUDIO SOURCES")]
+    #region OBJECTS
+    [Header("OBJECTS")]
+    [SerializeField] private LayerMask groundLayer;
+    #endregion
+
+    #region AUDIO
+    [Header("AUDIO")]
     [SerializeField] private AudioSource footstepsAudioSource;
     [SerializeField] private AudioSource grassFootstepsAudioSource;
+    #endregion
+
+    private void Start()
+    {
+        gameManager = ServiceManager.GetService<GameManager>();
+        keybindManager = ServiceManager.GetService<KeybindManager>();
+    }
 
     private void Update()
     {
-        if (RoundManager.Instance.CurrentGameState != GameState.OnPlaying)
+        if (gameManager.CurrentGameState != GameState.OnPlaying)
         {
             StopFootStepsAudioSource();
             return;
         }
 
-        KeyCode forward = KeybindManager.Instance.ActualKeybinds["MoveForward"];
-        KeyCode backward = KeybindManager.Instance.ActualKeybinds["MoveBackward"];
-        KeyCode left = KeybindManager.Instance.ActualKeybinds["MoveLeft"];
-        KeyCode right = KeybindManager.Instance.ActualKeybinds["MoveRight"];
+        KeyCode forward = keybindManager.ActualKeybinds["MoveForward"];
+        KeyCode backward = keybindManager.ActualKeybinds["MoveBackward"];
+        KeyCode left = keybindManager.ActualKeybinds["MoveLeft"];
+        KeyCode right = keybindManager.ActualKeybinds["MoveRight"];
 
         bool isMoving = Input.GetKey(forward) || Input.GetKey(backward) || Input.GetKey(left) || Input.GetKey(right);
 
@@ -41,7 +55,7 @@ public class FootstepsSystem : MonoBehaviour
 
         bool onGround = IsPlayerOnGround();
 
-        switch (RoundManager.Instance.CurrentPlayerState)
+        switch (gameManager.CurrentPlayerState)
         {
             case PlayerState.OnWalking:
                 if (onGround) FootstepsGrassWalk();
@@ -70,11 +84,11 @@ public class FootstepsSystem : MonoBehaviour
 
     private void Idle()
     {
-        if (RoundManager.Instance.CurrentPlayerState != PlayerState.OnCrouching 
-            && RoundManager.Instance.CurrentPlayerState != PlayerState.OnWalking
-            && RoundManager.Instance.CurrentPlayerState != PlayerState.OnRunning)
+        if (gameManager.CurrentPlayerState != PlayerState.OnCrouching 
+            && gameManager.CurrentPlayerState != PlayerState.OnWalking
+            && gameManager.CurrentPlayerState != PlayerState.OnRunning)
         {
-            RoundManager.Instance.CurrentPlayerState = PlayerState.OnIdle;
+            gameManager.CurrentPlayerState = PlayerState.OnIdle;
         }
 
         keyHoldTime = 0f;

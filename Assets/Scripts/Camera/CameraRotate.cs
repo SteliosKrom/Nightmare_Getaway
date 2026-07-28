@@ -1,11 +1,12 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Profiling;
 using UnityEngine.UI;
 
 public class CameraRotate : MonoBehaviour
 {
-    #region GENERAL
+    #region CAMERA & SPOTLIGHT
+    [Header("CAMERA & SPOTLIGHT")]
     [SerializeField] private float minX;
     [SerializeField] private float maxX;
     [SerializeField] private float spotlightRotationSpeed = 15f;
@@ -23,12 +24,10 @@ public class CameraRotate : MonoBehaviour
 
     [SerializeField] private Transform spotlight;
     [SerializeField] private Transform mainCamera;
+    #endregion
 
-    public float SensitivitySlider
-    {
-        get { return sensitivitySlider.value; }
-        set { sensitivitySlider.value = value; }
-    }
+    #region SERVICES
+    private GameManager gameManager;
     #endregion
 
     #region SCRIPT REFERENCES
@@ -42,6 +41,9 @@ public class CameraRotate : MonoBehaviour
     [SerializeField] private TextMeshProUGUI sensitivityValueText;
     #endregion
 
+    #region PROPERTIES
+    public float SensitivitySlider { get => sensitivitySlider.value; set => sensitivitySlider.value = value; }
+    #endregion
     private void Start()
     {
         xRotation = 0f;
@@ -59,11 +61,10 @@ public class CameraRotate : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (RoundManager.Instance.CurrentMenuState == MenuState.OnInventoryMenu) return;
+        if (gameManager.CurrentMenuState == MenuState.OnInventoryMenu || 
+            gameManager.CurrentMenuState == MenuState.OnNoteMenu) return;
 
-        if (RoundManager.Instance.CurrentMenuState == MenuState.OnNoteMenu) return;
-
-        if (RoundManager.Instance.CurrentGameState == GameState.OnPlaying)
+        if (gameManager.CurrentGameState == GameState.OnPlaying)
         {
             float mouseY = Input.GetAxis("Mouse Y") * sensitivitySlider.value;
             float mouseX = Input.GetAxis("Mouse X") * sensitivitySlider.value;
@@ -83,15 +84,23 @@ public class CameraRotate : MonoBehaviour
 
     public void UpdateSpotlightRotation(float newXRotation, float newYRotation)
     {
-        spotlightYRotation = Mathf.Lerp(spotlightYRotation, newYRotation, spotlightRotationSpeed * Time.deltaTime);
-        spotlightXRotation = Mathf.Lerp(spotlightXRotation, newXRotation, spotlightRotationSpeed * Time.deltaTime);
+        spotlightYRotation = Mathf.Lerp(spotlightYRotation, newYRotation, 
+            spotlightRotationSpeed * Time.deltaTime);
+
+        spotlightXRotation = Mathf.Lerp(spotlightXRotation, newXRotation, 
+            spotlightRotationSpeed * Time.deltaTime);
+
         spotlight.rotation = Quaternion.Euler(spotlightXRotation, spotlightYRotation, zRotation);
     }
 
     public void UpdateCameraRotation(float newXRotation, float newYRotation)
     {
-        mainCameraYRotation = Mathf.Lerp(mainCameraYRotation, newYRotation, mainCameraRotationSpeed * Time.deltaTime);
-        mainCameraXRotation = Mathf.Lerp(mainCameraXRotation, newXRotation, mainCameraRotationSpeed * Time.deltaTime);
+        mainCameraYRotation = Mathf.Lerp(mainCameraYRotation, newYRotation, 
+            mainCameraRotationSpeed * Time.deltaTime);
+
+        mainCameraXRotation = Mathf.Lerp(mainCameraXRotation, newXRotation, 
+            mainCameraRotationSpeed * Time.deltaTime);
+
         mainCamera.rotation = Quaternion.Euler(mainCameraXRotation, mainCameraYRotation, zRotation);
     }
 

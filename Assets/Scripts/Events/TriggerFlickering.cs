@@ -15,6 +15,11 @@ public class TriggerFlickering : MonoBehaviour
     private bool isFlickering = false;
     #endregion
 
+    #region SERVICES
+    private AudioManager audioManager;
+    private GameManager gameManager;
+    #endregion
+
     #region SCRIPT REFERENCES
     [Header("SCRIPT REFERENCES")]
     [SerializeField] private Interactor interactor;
@@ -36,11 +41,20 @@ public class TriggerFlickering : MonoBehaviour
     [SerializeField] private BoxCollider onTrigger;
     #endregion
 
+    #region LIGHT
     [Header("OTHER")]
     public Light newLight;
+    #endregion
 
+    #region PROPERTIES
     public bool IsTriggered { get { return isTriggered; } set { isTriggered = value; } }
     public bool IsFlickering { get { return isFlickering; } }
+    #endregion
+    private void Start()
+    {
+        audioManager = ServiceManager.GetService<AudioManager>();
+        gameManager = ServiceManager.GetService<GameManager>();
+    }
 
     private void OnTriggerEnter(Collider other)
     { 
@@ -49,7 +63,7 @@ public class TriggerFlickering : MonoBehaviour
             IsTriggered = true;
             isFlickering = true;
             onTrigger.enabled = false;
-            AudioManager.Instance.PlaySFX(creepyLaughAudioSource, creepyLaughAudioClip);
+            audioManager.PlaySFX(creepyLaughAudioSource, creepyLaughAudioClip);
             StartCoroutine(FlickerDelay());
             StartCoroutine(DemonDollObstacleLifetimeDelay());
         }
@@ -57,7 +71,7 @@ public class TriggerFlickering : MonoBehaviour
 
     public void ToggleFlicker()
     {
-        bool isPlaying = RoundManager.Instance.CurrentGameState == GameState.OnPlaying;
+        bool isPlaying = gameManager.CurrentGameState == GameState.OnPlaying;
 
         if (isPlaying)
         {

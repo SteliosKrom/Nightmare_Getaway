@@ -1,11 +1,9 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering;
-using System.Collections;
 
 public class BrightnessManager : MonoBehaviour
 {

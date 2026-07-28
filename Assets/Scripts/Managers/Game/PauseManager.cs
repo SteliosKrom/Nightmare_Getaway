@@ -13,6 +13,13 @@ public class PauseManager : MonoBehaviour
     [SerializeField] private AddEventTrigger addEventTrigger;
     #endregion
 
+    #region SERVICES
+    private SettingsUIManager settingsUIManager;
+    private GameManager gameManager;
+    private AudioManager audioManager;
+    private KeybindManager keybindManager;
+    #endregion
+
     #region STATES
     [Header("GAME STATES")]
     private bool isDoorOpenedSoundPaused = false;
@@ -57,6 +64,13 @@ public class PauseManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] allButtonTexts;
     #endregion
 
+    private void Start()
+    {
+        gameManager = ServiceManager.GetService<GameManager>();
+        audioManager = ServiceManager.GetService<AudioManager>();
+        keybindManager = ServiceManager.GetService<KeybindManager>();
+    }
+
     private void Update()
     {
         CheckIfResumed();
@@ -65,15 +79,13 @@ public class PauseManager : MonoBehaviour
 
     public void PauseAndResume()
     {
-        KeyCode pause = KeybindManager.Instance.ActualKeybinds["Pause"];
+        KeyCode pause = keybindManager.ActualKeybinds["Pause"];
 
-        if (RoundManager.Instance.CurrentMenuState == MenuState.OnInventoryMenu)
+        if (gameManager.CurrentMenuState == MenuState.OnInventoryMenu ||
+            gameManager.CurrentMenuState == MenuState.OnNoteMenu)
             return;
 
-        if (RoundManager.Instance.CurrentMenuState == MenuState.OnNoteMenu)
-            return;
-
-        if (KeybindManager.Instance.IsWaitingForKey == true)
+        if (keybindManager.IsWaitingForKey == true)
             return;
 
         if (!Input.GetKeyDown(pause))
@@ -87,13 +99,13 @@ public class PauseManager : MonoBehaviour
 
     public void UpdateCursorDisplay()
     {
-        if (RoundManager.Instance.CurrentGameState == GameState.OnPlaying)
+        if (gameManager.CurrentGameState == GameState.OnPlaying)
         {
             PauseGame();
         }
-        else if (RoundManager.Instance.CurrentGameState == GameState.OnPause)
+        else if (gameManager.CurrentGameState == GameState.OnPause)
         {
-            switch (RoundManager.Instance.CurrentMenuState)
+            switch (gameManager.CurrentMenuState)
             {
                 case MenuState.OnPauseMenu:
                     ResumeGameFromPauseMenu();
@@ -112,9 +124,10 @@ public class PauseManager : MonoBehaviour
     {
         if (resumed)
         {
-            if (AudioManager.Instance.HeartbeatAudioSource.isPlaying)
+            if (audioManager.HeartbeatAudioSource.isPlaying)
             {
-                AudioManager.Instance.MainGameAudioSource.volume = Mathf.Lerp(AudioManager.Instance.MainGameAudioSource.volume, 0.025f, 2f * Time.deltaTime);
+                audioManager.MainGameAudioSource.volume =
+                    Mathf.Lerp(audioManager.MainGameAudioSource.volume, 0.025f, 2f * Time.deltaTime);
             }
         }
     }
@@ -126,16 +139,17 @@ public class PauseManager : MonoBehaviour
 
         HUD.Instance.DisableAllHUDIcons();
 
-        AudioManager.Instance.PauseSound(AudioManager.Instance.MainGameAudioSource);
-        AudioManager.Instance.PauseSounds();
+        audioManager.PauseSound(audioManager.MainGameAudioSource);
+        audioManager.PauseSounds();
 
         CheckDoorStateOnPause();
         Time.timeScale = 0f;
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        RoundManager.Instance.CurrentGameState = GameState.OnPause;
-        RoundManager.Instance.CurrentMenuState = MenuState.OnPauseMenu;
+
+        gameManager.CurrentGameState = GameState.OnPause;
+        gameManager.CurrentMenuState = MenuState.OnPauseMenu;
     }
 
     public void ResumeGameFromGameSettings()
@@ -143,7 +157,7 @@ public class PauseManager : MonoBehaviour
         pauseMenu.SetActive(true);
         settingsMenu.SetActive(false);
 
-        SettingsUIManager.Instance.GetBackToPauseMenu.SetActive(false);
+        settingsUIManager.GetBackToPauseMenu.SetActive(false);
 
         HUD.Instance.DotIcon.SetActive(false);
 
@@ -152,28 +166,29 @@ public class PauseManager : MonoBehaviour
         addEventTrigger.ExitHoverSoundEffectSettings(graphicsCategoryButton.transform);
         addEventTrigger.ExitHoverSoundEffectSettings(controlsCategoryButon.transform);
 
-        addEventTrigger.ExitHoverEffectOther(SettingsUIManager.Instance.GetBackToSettingsFromGameButton.transform);
-        addEventTrigger.ExitHoverEffectOther(SettingsUIManager.Instance.GetBackToSettingsButton.transform);
+        addEventTrigger.ExitHoverEffectOther(settingsUIManager.GetBackToSettingsFromGameButton.transform);
+        addEventTrigger.ExitHoverEffectOther(settingsUIManager.GetBackToSettingsButton.transform);
 
         ChangeButtonTextColor();
 
         Time.timeScale = 0f;
-        RoundManager.Instance.CurrentGameState = GameState.OnPause;
-        RoundManager.Instance.CurrentMenuState = MenuState.OnPauseMenu;
+
+        gameManager.CurrentGameState = GameState.OnPause;
+        gameManager.CurrentMenuState = MenuState.OnPauseMenu;
     }
 
     public void ResumeGameFromCategorySettings()
     {
         settingsMenu.SetActive(true);
 
-        SettingsUIManager.Instance.GetBackToSettingsFromGame.SetActive(false);
-        SettingsUIManager.Instance.GetBackToPauseMenu.SetActive(true);
+        settingsUIManager.GetBackToSettingsFromGame.SetActive(false);
+        settingsUIManager.GetBackToPauseMenu.SetActive(true);
 
-        SettingsUIManager.Instance.HideAllCategories();
+        settingsUIManager.HideAllCategories();
         ChangeButtonTextColor();
 
-        addEventTrigger.ExitHoverEffectOther(SettingsUIManager.Instance.GetBackToSettingsFromGameButton.transform);
-        RoundManager.Instance.CurrentMenuState = MenuState.OnGameSettings;
+        addEventTrigger.ExitHoverEffectOther(settingsUIManager.GetBackToSettingsFromGameButton.transform);
+        gameManager.CurrentMenuState = MenuState.OnGameSettings;
     }
 
     public void ResumeGameFromPauseMenu()
@@ -181,8 +196,8 @@ public class PauseManager : MonoBehaviour
         HUD.Instance.ShowDotOnly();
         pauseMenu.SetActive(false);
 
-        AudioManager.Instance.UnPauseSound(AudioManager.Instance.MainGameAudioSource);
-        AudioManager.Instance.UnPauseSounds();
+        audioManager.UnPauseSound(audioManager.MainGameAudioSource);
+        audioManager.UnPauseSounds();
 
         ChangeButtonTextColor();
 
@@ -198,20 +213,20 @@ public class PauseManager : MonoBehaviour
         Cursor.visible = false;
         resumed = true;
 
-        RoundManager.Instance.CurrentGameState = GameState.OnPlaying;
-        RoundManager.Instance.CurrentMenuState = MenuState.None;
+        gameManager.CurrentGameState = GameState.OnPlaying;
+        gameManager.CurrentMenuState = MenuState.None;
     }
 
     public void CheckDoorStateOnPause()
     {
         if (doorOpenedAudioSource.isPlaying)
         {
-            AudioManager.Instance.PauseSound(doorOpenedAudioSource);
+            audioManager.PauseSound(doorOpenedAudioSource);
             isDoorOpenedSoundPaused = true;
         }
         else if (doorClosedAudioSource.isPlaying)
         {
-            AudioManager.Instance.PauseSound(doorClosedAudioSource);
+            audioManager.PauseSound(doorClosedAudioSource);
             isDoorClosedSoundPaused = true;
         }
     }
@@ -220,12 +235,12 @@ public class PauseManager : MonoBehaviour
     {
         if (isDoorOpenedSoundPaused)
         {
-            AudioManager.Instance.UnPauseSound(doorOpenedAudioSource);
+            audioManager.UnPauseSound(doorOpenedAudioSource);
             isDoorOpenedSoundPaused = false;
         }
         else if (isDoorClosedSoundPaused)
         {
-            AudioManager.Instance.UnPauseSound(doorClosedAudioSource);
+            audioManager.UnPauseSound(doorClosedAudioSource);
             isDoorClosedSoundPaused = false;
         }
     }
@@ -241,8 +256,6 @@ public class PauseManager : MonoBehaviour
     public void ChangeButtonTextColor()
     {
         foreach (TextMeshProUGUI text in allButtonTexts)
-        {
             text.color = Color.white;
-        }
     }
 }

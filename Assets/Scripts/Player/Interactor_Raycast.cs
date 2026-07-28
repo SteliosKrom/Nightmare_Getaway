@@ -1,26 +1,24 @@
-﻿using NUnit.Framework.Internal.Filters;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public partial class Interactor
 {
     public void TryInteract()
     {
-        if (!Physics.Raycast(interactionSource.position, interactionSource.forward, out RaycastHit hit, interactionRange, interactableLayer | obstacleLayer))
+        if (!Physics.Raycast(interactionSource.position, interactionSource.forward, out RaycastHit hit, 
+            interactionRange, interactableLayer | obstacleLayer))
             return;
 
         if (hit.collider.TryGetComponent(out IInteractable interactable))
-        {
             interactable.Interact(this);
-        }
     }
 
     public void DetectInteractable()
     {
-        if (RoundManager.Instance.CurrentGameState != GameState.OnPlaying)
+        if (gameManager.CurrentGameState != GameState.OnPlaying)
             return;
-        if (RoundManager.Instance.CurrentMenuState == MenuState.OnInventoryMenu ||
-            RoundManager.Instance.CurrentMenuState == MenuState.OnNoteMenu) return;
+
+        if (gameManager.CurrentMenuState == MenuState.OnInventoryMenu ||
+            gameManager.CurrentMenuState == MenuState.OnNoteMenu) return;
 
         LayerMask combinedMask = interactableLayer | obstacleLayer;
 
@@ -45,9 +43,9 @@ public partial class Interactor
         {
             bool isLocked = door.tag switch
             {
-                "KidsDoor" => RoundManager.Instance.CurrentKidsDoorState != KidsDoorState.unlocked,
-                "GarageDoor" => RoundManager.Instance.CurrentGarageDoorState != GarageDoorState.unlocked,
-                "MainDoor" => RoundManager.Instance.CurrentMainDoorState != MainDoorState.unlocked,
+                "KidsDoor" => gameManager.CurrentKidsDoorState != KidsDoorState.unlocked,
+                "GarageDoor" => gameManager.CurrentGarageDoorState != GarageDoorState.unlocked,
+                "MainDoor" => gameManager.CurrentMainDoorState != MainDoorState.unlocked,
                 _ => false
             };
 

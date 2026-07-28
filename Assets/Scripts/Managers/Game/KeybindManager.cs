@@ -1,22 +1,22 @@
 using UnityEngine;
 using TMPro;
 using System;
-using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
-using Unity.VisualScripting;
 
 public class KeybindManager : MonoBehaviour
 {
-    public static KeybindManager Instance;
-
     private string currentActionName;
 
-    [SerializeField] private bool isWaitingForKey = false;
+    private bool isWaitingForKey = false;
     private bool coroutineInProgress = false;
 
     private float keybindsDelay = 1f;
     private float isWaitingForKeyDelay = 0.1f;
+
+    #region SERVICES
+    private GameManager gameManager;
+    #endregion
 
     #region UI
     [Header("TEXT")]
@@ -52,6 +52,8 @@ public class KeybindManager : MonoBehaviour
 
     private void Awake()
     {
+        ServiceManager.RegisterService<KeybindManager>(this);
+
         actualKeybinds = new Dictionary<string, KeyCode>
         {
             {"MoveForward", KeyCode.W},
@@ -79,15 +81,11 @@ public class KeybindManager : MonoBehaviour
             {"Inventory", inventoryText},
             {"Pause", pauseText}
         };
+    }
 
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+    private void Start()
+    {
+        gameManager = ServiceManager.GetService<GameManager>();
     }
 
     private void Update()
@@ -116,14 +114,10 @@ public class KeybindManager : MonoBehaviour
                     keybindsPanel.SetActive(false);
                     enterAKeyText.SetActive(false);
 
-                    if (RoundManager.Instance.CurrentMenuState == MenuState.OnMenuSettings)
-                    {
+                    if (gameManager.CurrentMenuState == MenuState.OnMenuSettings)
                         backToPreviousMenuSettings.SetActive(true);
-                    }
-                    else if (RoundManager.Instance.CurrentMenuState == MenuState.OnGameSettings)
-                    {
+                    else if (gameManager.CurrentMenuState == MenuState.OnGameSettings)
                         backToPreviousGameSettings.SetActive(true);
-                    }
 
                     keybindsText[currentActionName].text = GetReadableKeyName(keycode);
                     actualKeybinds[currentActionName] = keycode;
@@ -157,14 +151,15 @@ public class KeybindManager : MonoBehaviour
             }
         }
 
-        if (RoundManager.Instance.CurrentMenuState == MenuState.OnMenuSettings)
+        if (gameManager.CurrentMenuState == MenuState.OnMenuSettings)
             backToPreviousMenuSettings.SetActive(false);
-        else if (RoundManager.Instance.CurrentMenuState == MenuState.OnGameSettings)
+        else if (gameManager.CurrentMenuState == MenuState.OnGameSettings)
             backToPreviousGameSettings.SetActive(false);
 
         keybindsPanel.SetActive(true);
         enterAKeyText.SetActive(true);
         keyAssignedText.SetActive(false);
+
         isWaitingForKey = true;
     }
 

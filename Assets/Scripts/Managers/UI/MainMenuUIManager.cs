@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
-using System.Runtime.CompilerServices;
 
 public class MainMenuUIManager : MonoBehaviour
 {
@@ -30,6 +29,12 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] private HUD HUD;
     [SerializeField] private TypewriterEffect typewriterEffect;
     [SerializeField] private OutdoorCameraEffect outdoorCameraEffect;
+    #endregion
+
+    #region SERVICES
+    private SettingsUIManager settingsUIManager;
+    private AudioManager audioManager;
+    private GameManager gameManager;
     #endregion
 
     #region TEXT
@@ -81,7 +86,7 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] private Light outdoorLight;
     #endregion
 
-    #region 
+    #region ANIMATIONS
     [Header("ANIMATORS")]
     [SerializeField] private Animator introDescriptionAnimator;
     [SerializeField] private Animator introTextAnimator;
@@ -90,19 +95,22 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] private Animator pressSpaceToSkipIntroAnimator;
     #endregion
 
+    #region PROPERTIES
     public GameObject MainMenu => mainMenu;
-
+    #endregion
     private void Start()
     {
+        audioManager = ServiceManager.GetService<AudioManager>();
+
         Time.timeScale = 1f;
 
         titleMenu.SetActive(true);
 
-        AudioManager.Instance.Play(AudioManager.Instance.MainMenuAudioSource);
-        AudioManager.Instance.Play(rainAudioSource);
+        audioManager.Play(audioManager.MainMenuAudioSource);
+        audioManager.Play(rainAudioSource);
 
-        AudioManager.Instance.StopSound(AudioManager.Instance.MainGameAudioSource);
-        AudioManager.Instance.StopSound(heartbeatGameAudioSource);
+        audioManager.StopSound(audioManager.MainGameAudioSource);
+        audioManager.StopSound(heartbeatGameAudioSource);
     }
 
     private void Update()
@@ -115,13 +123,13 @@ public class MainMenuUIManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (RoundManager.Instance.CurrentGameState == GameState.OnIntro)
+            if (gameManager.CurrentGameState == GameState.OnIntro)
             {
                 EndGameIntro();
                 StopAllCoroutines();
                 kidRoomLight.enabled = true;
                 RenderSettings.fogDensity = 0.005f;
-                AudioManager.Instance.StopSound(typewriterAudioSource);
+                audioManager.StopSound(typewriterAudioSource);
                 StartCoroutine(AfterEndGameIntroDelay());
             }
         }
@@ -129,17 +137,17 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void PressAnyKeyDown()
     {
-        if (RoundManager.Instance.CurrentMenuState == MenuState.OnTitleMenu)
+        if (gameManager.CurrentMenuState == MenuState.OnTitleMenu)
         {
             if (Input.anyKeyDown)
             {
-                AudioManager.Instance.PlaySFX(menuEntryAudioSource, menuEntryAudioClip);
+                audioManager.PlaySFX(menuEntryAudioSource, menuEntryAudioClip);
 
                 titleMenuAnimator.SetBool("IsFadingOut", true);
                 pressAnyKeyAnimator.SetBool("IsFadingOut", true);
 
                 StartCoroutine(MainMenuEntryDelay());
-                RoundManager.Instance.CurrentMenuState = MenuState.OnMainMenu;
+                gameManager.CurrentMenuState = MenuState.OnMainMenu;
             }
         }
     }
@@ -160,7 +168,7 @@ public class MainMenuUIManager : MonoBehaviour
         loadingPanel.SetActive(false);
 
         playButton.transform.DOScale(1f, 0.2f);
-        RoundManager.Instance.CurrentGameState = GameState.OnPlaying;
+        gameManager.CurrentGameState = GameState.OnPlaying;
     }
 
     public void PlayButton()
@@ -171,8 +179,8 @@ public class MainMenuUIManager : MonoBehaviour
     private IEnumerator AfterEndGameIntroDelay()
     {
         yield return new WaitForSeconds(endGameIntroDelay);
-        AudioManager.Instance.UnPauseSound(rainAudioSource);
-        AudioManager.Instance.Play(AudioManager.Instance.MainGameAudioSource);
+        audioManager.UnPauseSound(rainAudioSource);
+        audioManager.Play(audioManager.MainGameAudioSource);
     }
 
     private IEnumerator MainMenuEntryDelay()
@@ -183,15 +191,16 @@ public class MainMenuUIManager : MonoBehaviour
 
     public IEnumerator PlayButtonDelay()
     {
-        RoundManager.Instance.CurrentMenuState = MenuState.None;
-        RoundManager.Instance.CurrentEnvironmentState = EnvironmentState.OnIndoors;
+        gameManager.CurrentMenuState = MenuState.None;
+        gameManager.CurrentEnvironmentState = EnvironmentState.OnIndoors;
         float playButtonDelay = Random.Range(1f, 2f); // Random delay between 1 to 2 seconds, change 10 to 20 later
 
         loadingPanel.SetActive(true);
 
-        AudioManager.Instance.StopSound(AudioManager.Instance.MainMenuAudioSource);
-        AudioManager.Instance.StopSound(menuEntryAudioSource);
-        AudioManager.Instance.PauseSound(rainAudioSource);
+        audioManager.StopSound(audioManager.MainMenuAudioSource);
+        audioManager.StopSound(menuEntryAudioSource);
+
+        audioManager.PauseSound(rainAudioSource);
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -207,7 +216,7 @@ public class MainMenuUIManager : MonoBehaviour
 
         yield return new WaitForSeconds(storyIntroTitleDelay);
 
-        RoundManager.Instance.CurrentGameState = GameState.OnIntro;
+        gameManager.CurrentGameState = GameState.OnIntro;
         StartCoroutine(typewriterEffect.PlayStoryIntroTextTypeWriterDelay(storyIntroText, storyIntroFullText));
         pressSpaceToSkipIntroAnimator.SetBool("IsFading", true);
 
@@ -230,13 +239,13 @@ public class MainMenuUIManager : MonoBehaviour
     {
         mainMenu.SetActive(false);
 
-        SettingsUIManager.Instance.SettingsMenu.SetActive(true);
-        SettingsUIManager.Instance.GetBackToMenu.SetActive(true);
+        settingsUIManager.SettingsMenu.SetActive(true);
+        settingsUIManager.GetBackToMenu.SetActive(true);
 
         DisableRedColorTextFromMenuButtons();
 
         settingsButton.transform.DOScale(1f, 0.2f);
-        RoundManager.Instance.CurrentMenuState = MenuState.OnMenuSettings;
+        gameManager.CurrentMenuState = MenuState.OnMenuSettings;
     }
 
     public void CreditsButton()
@@ -263,7 +272,7 @@ public class MainMenuUIManager : MonoBehaviour
 
         backToCreditsMenuText.color = Color.white;
         backToMenuButtonCredits.transform.DOScale(3.2f, 0.2f);
-        RoundManager.Instance.CurrentMenuState = MenuState.OnMainMenu;
+        gameManager.CurrentMenuState = MenuState.OnMainMenu;
     }
 
     public void DisableRedColorTextFromMenuButtons()

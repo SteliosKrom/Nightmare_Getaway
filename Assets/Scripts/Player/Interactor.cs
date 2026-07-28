@@ -22,7 +22,6 @@ public partial class Interactor : MonoBehaviour
 
     #region STATES
     [Header("STATES")]
-    private bool isLocked = false;
     private bool isToggled = true;
     private bool hasFlashlight = false;
     private bool canToggle = true;
@@ -33,6 +32,12 @@ public partial class Interactor : MonoBehaviour
     [SerializeField] private Transform interactionSource;
     public float interactionRange;
     private int keyCounter = 0;
+    #endregion
+
+    #region SERVICES
+    private AudioManager audioManager;
+    private GameManager gameManager;
+    private KeybindManager keybindManager;
     #endregion
 
     #region SCRIPT REFERENCES
@@ -147,13 +152,19 @@ public partial class Interactor : MonoBehaviour
     [SerializeField] private Light garageRoomLight;
     #endregion
 
+    #region PROPERTIES
     public GameObject NoteMenu => noteMenu;
     public GameObject LockedMessagePanel => lockedMessagePanel;
+
     public bool HasFlashlight => hasFlashlight;
     public bool CanToggle { get => canToggle; set => canToggle = value; }
-
+    #endregion
     private void Start()
     {
+        audioManager = ServiceManager.GetService<AudioManager>();
+        gameManager = ServiceManager.GetService<GameManager>();
+        keybindManager = ServiceManager.GetService<KeybindManager>();
+
         DisplayItems(roomKey, mainDoorKey, phone, garageKey);
     }
 

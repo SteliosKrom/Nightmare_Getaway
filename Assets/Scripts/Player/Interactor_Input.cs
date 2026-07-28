@@ -6,10 +6,10 @@ public partial class Interactor
     {
         if (IsInputBlocked()) return;
 
-        if (Input.GetKeyDown(KeybindManager.Instance.ActualKeybinds["Interact"]))
+        if (Input.GetKeyDown(keybindManager.ActualKeybinds["Interact"]))
             TryInteract();
 
-        if (Input.GetKeyDown(KeybindManager.Instance.ActualKeybinds["Flashlight"]))
+        if (Input.GetKeyDown(keybindManager.ActualKeybinds["Flashlight"]))
             ToggleFlashlight();
     }
 
@@ -17,7 +17,7 @@ public partial class Interactor
     {
         if (!hasFlashlight || triggerFlickering.IsFlickering) return;
 
-        if (RoundManager.Instance.CurrentGameState == GameState.OnPlaying)
+        if (gameManager.CurrentGameState == GameState.OnPlaying)
         {
             flashlight.Toggle();
             flashlight.flashlightAudioSourceObj.transform.position = equippedFlashlightObj.transform.position;
@@ -27,7 +27,7 @@ public partial class Interactor
 
     private bool IsInputBlocked()
     {
-        return !canToggle || RoundManager.Instance.CurrentMenuState == MenuState.OnInventoryMenu
-            || RoundManager.Instance.CurrentMenuState == MenuState.OnNoteMenu;
+        return !canToggle || gameManager.CurrentMenuState == MenuState.OnInventoryMenu
+            || gameManager.CurrentMenuState == MenuState.OnNoteMenu;
     }
 }

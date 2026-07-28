@@ -4,15 +4,22 @@ using UnityEngine.UI;
 
 public class LightingEffect : MonoBehaviour
 {
-    [Header("OTHER")]
-    [SerializeField] private ParticleSystem lightingParticle;
-
-    [Header("TYPES")]
     private float startDelay;
     private float stopDelay = 1f;
 
+    #region SERVICES
+    private GameManager gameManager;
+    #endregion
+
+    #region PARTICLES
+    [Header("PARTICLES")]
+    [SerializeField] private ParticleSystem lightingParticle;
+    #endregion
+
     private void Start()
     {
+        gameManager = ServiceManager.GetService<GameManager>();
+
         startDelay = Random.Range(40, 60);
         StartCoroutine(StartLightingDelay());
     }
@@ -27,8 +34,8 @@ public class LightingEffect : MonoBehaviour
 
         while (true)
         {
-            if (RoundManager.Instance.CurrentGameState != GameState.OnPause
-                && RoundManager.Instance.CurrentMenuState != MenuState.OnGameSettings)
+            if (gameManager.CurrentGameState != GameState.OnPause
+                && gameManager.CurrentMenuState != MenuState.OnGameSettings)
             {
                 yield return new WaitForSeconds(startDelay);
                 lightingParticle.Play();

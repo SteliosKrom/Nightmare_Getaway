@@ -4,17 +4,20 @@ public class HUD : MonoBehaviour
 {
     public static HUD Instance;
 
+    #region OBJECTS
     [Header("OBJECTS")]
     [SerializeField] private GameObject[] allHUDIcons;
     [SerializeField] private GameObject interactIcon;
     [SerializeField] private GameObject lockedIcon;
     [SerializeField] private GameObject dotIcon;
+    #endregion
 
+    #region PROPERTIES
     public GameObject[] AllHUDIcons => allHUDIcons;
     public GameObject InteractIcon => interactIcon;
     public GameObject LockedIcon => lockedIcon;
     public GameObject DotIcon => dotIcon;
-
+    #endregion
     private void Awake()
     {
         if (Instance == null)

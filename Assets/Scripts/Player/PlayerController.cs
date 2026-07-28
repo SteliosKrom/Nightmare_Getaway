@@ -1,12 +1,13 @@
-using DG.Tweening;
-using System;
 using System.Collections;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    #region SERVICES
+    private GameManager gameManager;
+    private KeybindManager keybindManager;
+    #endregion
+
     #region SCRIPT REFERENCES
     [Header("SCRIPT REFERENCES")]
     [SerializeField] private DoorBase doorBase;
@@ -44,14 +45,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator playerAnimator;
     #endregion
 
-    public CharacterController CharacterController 
-    { 
-        get { return playerCharacterController; } 
-        set { playerCharacterController = value; } 
+    public CharacterController CharacterController
+    {
+        get => playerCharacterController;
+        set => playerCharacterController = value;
     }
 
     private void Start()
     {
+        gameManager = ServiceManager.GetService<GameManager>();
+        keybindManager = ServiceManager.GetService<KeybindManager>();
+
         playerCharacterController.slopeLimit = 45f;
         playerCharacterController.stepOffset = 0.5f;
         playerCharacterController.skinWidth = 0.08f;
@@ -59,10 +63,10 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (RoundManager.Instance.CurrentMenuState == MenuState.OnInventoryMenu ||
-            RoundManager.Instance.CurrentMenuState == MenuState.OnNoteMenu)
+        if (gameManager.CurrentMenuState == MenuState.OnInventoryMenu ||
+            gameManager.CurrentMenuState == MenuState.OnNoteMenu)
         {
-            RoundManager.Instance.CurrentPlayerState = PlayerState.OnIdle;
+            gameManager.CurrentPlayerState = PlayerState.OnIdle;
 
             playerCharacterController.Move(Vector3.zero);
 
@@ -76,7 +80,7 @@ public class PlayerController : MonoBehaviour
 
     public void MovePlayer()
     {
-        if (RoundManager.Instance.CurrentGameState == GameState.OnPlaying)
+        if (gameManager.CurrentGameState == GameState.OnPlaying)
         {
             PlayerMovementInput();
             ApplyMovementAndHeadBobbing();
@@ -85,27 +89,27 @@ public class PlayerController : MonoBehaviour
 
     public void PlayerMovementInput()
     {
-        KeyCode forward = KeybindManager.Instance.ActualKeybinds["MoveForward"];
-        KeyCode backward = KeybindManager.Instance.ActualKeybinds["MoveBackward"];
-        KeyCode left = KeybindManager.Instance.ActualKeybinds["MoveLeft"];
-        KeyCode right = KeybindManager.Instance.ActualKeybinds["MoveRight"];
-        KeyCode sprint = KeybindManager.Instance.ActualKeybinds["Sprint"];
+        KeyCode forward = keybindManager.ActualKeybinds["MoveForward"];
+        KeyCode backward = keybindManager.ActualKeybinds["MoveBackward"];
+        KeyCode left = keybindManager.ActualKeybinds["MoveLeft"];
+        KeyCode right = keybindManager.ActualKeybinds["MoveRight"];
+        KeyCode sprint = keybindManager.ActualKeybinds["Sprint"];
 
         bool isMoving = Input.GetKey(forward) || Input.GetKey(backward) || Input.GetKey(left) || Input.GetKey(right);
 
-        if (Input.GetKey(sprint) && isMoving && RoundManager.Instance.CurrentPlayerState != PlayerState.OnCrouching)
+        if (Input.GetKey(sprint) && isMoving && gameManager.CurrentPlayerState != PlayerState.OnCrouching)
         {
             Run();
             return;
         }
-        if (RoundManager.Instance.CurrentPlayerState == PlayerState.OnCrouching && isMoving)
+        if (gameManager.CurrentPlayerState == PlayerState.OnCrouching && isMoving)
         {
             CrouchWalk();
             return;
         }
-        if (RoundManager.Instance.CurrentPlayerState == PlayerState.OnCrouching && !isMoving)
+        if (gameManager.CurrentPlayerState == PlayerState.OnCrouching && !isMoving)
         {
-            RoundManager.Instance.CurrentPlayerState = PlayerState.OnCrouching;
+            gameManager.CurrentPlayerState = PlayerState.OnCrouching;
             return;
         }
         if (isMoving)
@@ -113,7 +117,7 @@ public class PlayerController : MonoBehaviour
             Walk();
             return;
         }
-        RoundManager.Instance.CurrentPlayerState = PlayerState.OnIdle;
+        gameManager.CurrentPlayerState = PlayerState.OnIdle;
     }
 
     public void CrouchInput()
@@ -121,40 +125,40 @@ public class PlayerController : MonoBehaviour
         if (!canCrouch)
             return;
 
-        if (RoundManager.Instance.CurrentGameState == GameState.OnPause) return;
-        if (RoundManager.Instance.CurrentGameState != GameState.OnPlaying) return;
+        if (gameManager.CurrentGameState == GameState.OnPause) return;
+        if (gameManager.CurrentGameState != GameState.OnPlaying) return;
 
-        KeyCode crouch = KeybindManager.Instance.ActualKeybinds["Crouch"];
+        KeyCode crouch = keybindManager.ActualKeybinds["Crouch"];
 
         if (Input.GetKeyDown(crouch))
         {
             StartCoroutine(CrouchCooldown());
-            if (RoundManager.Instance.CurrentPlayerState == PlayerState.OnIdle
-                || RoundManager.Instance.CurrentPlayerState == PlayerState.OnWalking
-                || RoundManager.Instance.CurrentPlayerState == PlayerState.OnRunning)
+            if (gameManager.CurrentPlayerState == PlayerState.OnIdle
+                || gameManager.CurrentPlayerState == PlayerState.OnWalking
+                || gameManager.CurrentPlayerState == PlayerState.OnRunning)
             {
                 playerAnimator.SetBool("IsCrouching", true);
-                RoundManager.Instance.CurrentPlayerState = PlayerState.OnCrouching;
+                gameManager.CurrentPlayerState = PlayerState.OnCrouching;
             }
-            else if (RoundManager.Instance.CurrentPlayerState == PlayerState.OnCrouching)
+            else if (gameManager.CurrentPlayerState == PlayerState.OnCrouching)
             {
                 playerAnimator.SetBool("IsCrouching", false);
-                RoundManager.Instance.CurrentPlayerState = PlayerState.OnIdle;
+                gameManager.CurrentPlayerState = PlayerState.OnIdle;
             }
         }
     }
 
     public void Walk()
     {
-        KeyCode forward = KeybindManager.Instance.ActualKeybinds["MoveForward"];
-        KeyCode backward = KeybindManager.Instance.ActualKeybinds["MoveBackward"];
-        KeyCode left = KeybindManager.Instance.ActualKeybinds["MoveLeft"];
-        KeyCode right = KeybindManager.Instance.ActualKeybinds["MoveRight"];
+        KeyCode forward = keybindManager.ActualKeybinds["MoveForward"];
+        KeyCode backward = keybindManager.ActualKeybinds["MoveBackward"];
+        KeyCode left = keybindManager.ActualKeybinds["MoveLeft"];
+        KeyCode right = keybindManager.ActualKeybinds["MoveRight"];
 
         Vector3 moveForwardDirection = Vector3.zero;
         Vector3 finalMovement = Vector3.zero;
 
-        RoundManager.Instance.CurrentPlayerState = PlayerState.OnWalking;
+        gameManager.CurrentPlayerState = PlayerState.OnWalking;
 
         if (Input.GetKey(forward)) moveForwardDirection += mainCamera.forward;
         if (Input.GetKey(backward)) moveForwardDirection -= mainCamera.forward;
@@ -167,15 +171,15 @@ public class PlayerController : MonoBehaviour
 
     public void Run()
     {
-        KeyCode forward = KeybindManager.Instance.ActualKeybinds["MoveForward"];
-        KeyCode backward = KeybindManager.Instance.ActualKeybinds["MoveBackward"];
-        KeyCode left = KeybindManager.Instance.ActualKeybinds["MoveLeft"];
-        KeyCode right = KeybindManager.Instance.ActualKeybinds["MoveRight"];
+        KeyCode forward = keybindManager.ActualKeybinds["MoveForward"];
+        KeyCode backward = keybindManager.ActualKeybinds["MoveBackward"];
+        KeyCode left = keybindManager.ActualKeybinds["MoveLeft"];
+        KeyCode right = keybindManager.ActualKeybinds["MoveRight"];
 
         Vector3 moveForwardDirection = Vector3.zero;
         Vector3 finalMovement = Vector3.zero;
 
-        RoundManager.Instance.CurrentPlayerState = PlayerState.OnRunning;
+        gameManager.CurrentPlayerState = PlayerState.OnRunning;
 
         if (Input.GetKey(forward)) moveForwardDirection += mainCamera.forward;
         if (Input.GetKey(backward)) moveForwardDirection -= mainCamera.forward;
@@ -188,15 +192,15 @@ public class PlayerController : MonoBehaviour
 
     public void CrouchWalk()
     {
-        KeyCode forward = KeybindManager.Instance.ActualKeybinds["MoveForward"];
-        KeyCode backward = KeybindManager.Instance.ActualKeybinds["MoveBackward"];
-        KeyCode left = KeybindManager.Instance.ActualKeybinds["MoveLeft"];
-        KeyCode right = KeybindManager.Instance.ActualKeybinds["MoveRight"];
+        KeyCode forward = keybindManager.ActualKeybinds["MoveForward"];
+        KeyCode backward = keybindManager.ActualKeybinds["MoveBackward"];
+        KeyCode left = keybindManager.ActualKeybinds["MoveLeft"];
+        KeyCode right = keybindManager.ActualKeybinds["MoveRight"];
 
         Vector3 moveForwardDirection = Vector3.zero;
         Vector3 finalMovement = Vector3.zero;
 
-        RoundManager.Instance.CurrentPlayerState = PlayerState.OnCrouching;
+        gameManager.CurrentPlayerState = PlayerState.OnCrouching;
 
         if (Input.GetKey(forward)) moveForwardDirection += mainCamera.forward;
         if (Input.GetKey(backward)) moveForwardDirection -= mainCamera.forward;
@@ -209,14 +213,14 @@ public class PlayerController : MonoBehaviour
 
     public void ApplyMovementAndHeadBobbing()
     {
-        KeyCode forward = KeybindManager.Instance.ActualKeybinds["MoveForward"];
-        KeyCode backward = KeybindManager.Instance.ActualKeybinds["MoveBackward"];
-        KeyCode left = KeybindManager.Instance.ActualKeybinds["MoveLeft"];
-        KeyCode right = KeybindManager.Instance.ActualKeybinds["MoveRight"];
+        KeyCode forward = keybindManager.ActualKeybinds["MoveForward"];
+        KeyCode backward = keybindManager.ActualKeybinds["MoveBackward"];
+        KeyCode left = keybindManager.ActualKeybinds["MoveLeft"];
+        KeyCode right = keybindManager.ActualKeybinds["MoveRight"];
 
         bool isMoving = Input.GetKey(forward) || Input.GetKey(backward) || Input.GetKey(left) || Input.GetKey(right);
 
-        switch (RoundManager.Instance.CurrentPlayerState)
+        switch (gameManager.CurrentPlayerState)
         {
             case PlayerState.OnIdle:
                 cameraFollow.ApplyIdleHeadBobbing();

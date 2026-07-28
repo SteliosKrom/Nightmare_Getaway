@@ -9,11 +9,17 @@ using UnityEngine.UI;
 
 public class MainGameUIManager : MonoBehaviour
 {
-    private float noteInputMenuDelay = 1f;
+    private float noteInputMenuDelay = 0.15f;
 
     #region STATES
     [Header("GAME STATES")]
     [SerializeField] private bool resumed = false;
+    #endregion
+
+    #region SERVICES
+    private SettingsUIManager settingsUIManager;
+    private AudioManager audioManager;
+    private GameManager gameManager;
     #endregion
 
     #region SCRIPT REFERENCES
@@ -65,13 +71,20 @@ public class MainGameUIManager : MonoBehaviour
     [SerializeField] private GameObject secondaryCameraObj;
     #endregion
 
+    private void Start()
+    {
+        settingsUIManager = ServiceManager.GetService<SettingsUIManager>();
+        gameManager = ServiceManager.GetService<GameManager>();
+    }
+
     private void Update()
     {
         if (resumed)
         {
-            if (AudioManager.Instance.HeartbeatAudioSource.isPlaying)
+            if (audioManager.HeartbeatAudioSource.isPlaying)
             {
-                AudioManager.Instance.MainGameAudioSource.volume = Mathf.Lerp(AudioManager.Instance.MainGameAudioSource.volume, 0.025f, 2f * Time.deltaTime);
+                audioManager.MainGameAudioSource.volume = 
+                    Mathf.Lerp(audioManager.MainGameAudioSource.volume, 0.025f, 2f * Time.deltaTime);
             }
         }
         NoteMenuInput();
@@ -79,7 +92,7 @@ public class MainGameUIManager : MonoBehaviour
 
     public void NoteMenuInput()
     {
-        if (RoundManager.Instance.CurrentMenuState == MenuState.OnNoteMenu)
+        if (gameManager.CurrentMenuState == MenuState.OnNoteMenu)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -93,9 +106,8 @@ public class MainGameUIManager : MonoBehaviour
         pauseMenu.SetActive(false);
         HUD.Instance.DotIcon.SetActive(true);
 
-        AudioManager.Instance.UnPauseSound(AudioManager.Instance.MainGameAudioSource);
-
-        AudioManager.Instance.UnPauseSounds();
+        audioManager.UnPauseSound(audioManager.MainGameAudioSource);
+        audioManager.UnPauseSounds();
 
         resumeButton.transform.DOScale(0.8f, 0.2f);
         pauseManager.CheckDoorStateOnResume();
@@ -105,9 +117,11 @@ public class MainGameUIManager : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
         resumed = true;
-        RoundManager.Instance.CurrentGameState = GameState.OnPlaying;
-        RoundManager.Instance.CurrentMenuState = MenuState.None;
+
+        gameManager.CurrentGameState = GameState.OnPlaying;
+        gameManager.CurrentMenuState = MenuState.None;
     }
 
     public void SettingsButton()
@@ -115,30 +129,31 @@ public class MainGameUIManager : MonoBehaviour
         pauseMenu.SetActive(false);
         settingsMenu.SetActive(true);
 
-        SettingsUIManager.Instance.GetBackToPauseMenu.SetActive(true);
-        SettingsUIManager.Instance.SettingsMenu.SetActive(true);
+        settingsUIManager.GetBackToPauseMenu.SetActive(true);
+        settingsUIManager.SettingsMenu.SetActive(true);
 
         DisableRedColorTextFromPauseButtons();
 
         settingsButton.transform.DOScale(0.8f, 0.2f);
-        RoundManager.Instance.CurrentMenuState = MenuState.OnGameSettings;
+        gameManager.CurrentMenuState = MenuState.OnGameSettings;
     }
 
     public void HomeButton()
     {
         SceneManager.LoadScene("MainGameScene");
-        AudioManager.Instance.Play(AudioManager.Instance.MainMenuAudioSource);
+        audioManager.Play(audioManager.MainMenuAudioSource);
 
         pauseMenu.SetActive(false);
         mainMenu.SetActive(false);
         mainCameraObj.SetActive(false);
         secondaryCameraObj.SetActive(true);
+
         playerRespawn.Respawn();
 
         DisableRedColorTextFromPauseButtons();
 
         Time.timeScale = 1f;
-        RoundManager.Instance.CurrentMenuState = MenuState.OnMainMenu;
+       gameManager.CurrentMenuState = MenuState.OnMainMenu;
     }
 
     public void ExitButton()
@@ -149,16 +164,16 @@ public class MainGameUIManager : MonoBehaviour
     public void DisableRedColorTextFromPauseButtons()
     {
         foreach (TextMeshProUGUI text in pauseButtonText)
-        {
             text.color = Color.white;
-        }
     }
 
     public IEnumerator NoteMenuInputDelay()
     {
         yield return new WaitForSeconds(noteInputMenuDelay);
-        RoundManager.Instance.CurrentGameState = GameState.OnPlaying;
-        RoundManager.Instance.CurrentMenuState = MenuState.None;
+
+        gameManager.CurrentGameState = GameState.OnPlaying;
+        gameManager.CurrentMenuState = MenuState.None;
+
         interactor.NoteMenu.SetActive(false);
     }
 }

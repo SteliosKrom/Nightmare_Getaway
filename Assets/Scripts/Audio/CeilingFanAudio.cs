@@ -2,22 +2,33 @@ using UnityEngine;
 
 public class CeilingFanAudio : MonoBehaviour
 {
+    public LayerMask groundLayer;
+
+    #region SERVICES
+    private AudioManager audioManager;
+    private GameManager gameManager;
+    #endregion
+
+    #region AUDIO
     [Header("AUDIO")]
     public AudioLowPassFilter ceilingFanAudioLowPassFilter;
     public AudioSource ceilingFanAudioSource;
     public AudioClip ceilingFanAudioClip;
-    public LayerMask groundLayer;
+    #endregion
 
     private void Start()
     {
+        audioManager = ServiceManager.GetService<AudioManager>();
+        gameManager = ServiceManager.GetService<GameManager>();
+
         ceilingFanAudioSource.clip = ceilingFanAudioClip;
         ceilingFanAudioSource.loop = true;
-        AudioManager.Instance.StopSound(ceilingFanAudioSource);
+        audioManager.StopSound(ceilingFanAudioSource);
     }
 
     private void Update()
     {
-        if (RoundManager.Instance.CurrentGameState == GameState.OnPlaying)
+        if (gameManager.CurrentGameState == GameState.OnPlaying)
         {
             if (IsPlayerOnGround())
             {
@@ -33,7 +44,7 @@ public class CeilingFanAudio : MonoBehaviour
             }
 
             if (!ceilingFanAudioSource.isPlaying)
-                AudioManager.Instance.PlaySFX(ceilingFanAudioSource, ceilingFanAudioClip);
+                audioManager.PlaySFX(ceilingFanAudioSource, ceilingFanAudioClip);
         }
     }
 

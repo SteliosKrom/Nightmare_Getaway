@@ -55,7 +55,8 @@ public partial class Interactor
             case "GarageSwitch":
                 isToggled = !isToggled;
                 garageLightAnimator.SetBool("IsOn", isToggled);
-                if (!isToggled) StartCoroutine(GarageLightBreakDelay());
+                if (!isToggled)
+                    StartCoroutine(GarageLightBreakDelay());
                 PlayLightSFX();
                 break;
         }
@@ -74,9 +75,9 @@ public partial class Interactor
 
         bool isLocked = tag switch
         {
-            "KidsDoor" => RoundManager.Instance.CurrentKidsDoorState != KidsDoorState.unlocked,
-            "GarageDoor" => RoundManager.Instance.CurrentGarageDoorState != GarageDoorState.unlocked,
-            "MainDoor" => RoundManager.Instance.CurrentMainDoorState != MainDoorState.unlocked,
+            "KidsDoor" => gameManager.CurrentKidsDoorState != KidsDoorState.unlocked,
+            "GarageDoor" => gameManager.CurrentGarageDoorState != GarageDoorState.unlocked,
+            "MainDoor" => gameManager.CurrentMainDoorState != MainDoorState.unlocked,
             _ => false
         };
 
@@ -108,24 +109,25 @@ public partial class Interactor
 
     private void HandleCollectableItem(Interactable interactable)
     {
-        bool hasCrucifix = RoundManager.Instance.CurrentItemState == ItemState.cross;
-        bool hasKnife = RoundManager.Instance.CurrentItemState == ItemState.knife;
-        bool hasBook = RoundManager.Instance.CurrentItemState == ItemState.book;
+        bool hasCrucifix = gameManager.CurrentItemState == ItemState.cross;
+        bool hasKnife = gameManager.CurrentItemState == ItemState.knife;
+        bool hasBook = gameManager.CurrentItemState == ItemState.book;
 
         GameObject obj = interactable.gameObject;
         string tag = obj.tag;
 
         void PlayEquipSFX()
         {
-            AudioManager.Instance.EquipItem.source.transform.position = AudioManager.Instance.TriggerInteractable3DMusic.transform.position;
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.EquipItem.source, AudioManager.Instance.EquipItem.clip);
+            audioManager.EquipItem.source.transform.position = audioManager.TriggerInteractable3DMusic.transform.position;
+            audioManager.PlaySFX(audioManager.EquipItem.source, audioManager.EquipItem.clip);
         }
 
+        // The whole switch statement requires refactoring!!!
         switch (tag)
         {
             case "RoomKey":
-                RoundManager.Instance.CurrentItemState = ItemState.kidsRoomKey;
-                RoundManager.Instance.CurrentKidsDoorState = KidsDoorState.unlocked;
+                gameManager.CurrentItemState = ItemState.kidsRoomKey;
+                gameManager.CurrentKidsDoorState = KidsDoorState.unlocked;
                 taskManager.CompleteTask();
                 doll.SetActive(true);
                 roomKey.SetActive(false);
@@ -169,8 +171,8 @@ public partial class Interactor
                 PlayEquipSFX();
                 break;
             case "GarageKey":
-                RoundManager.Instance.CurrentItemState = ItemState.garageKey;
-                RoundManager.Instance.CurrentGarageDoorState = GarageDoorState.unlocked;
+                gameManager.CurrentItemState = ItemState.garageKey;
+                gameManager.CurrentGarageDoorState = GarageDoorState.unlocked;
                 phone.SetActive(true);
                 garageKey.SetActive(false);
                 demonCryCollider.enabled = true;
@@ -180,8 +182,8 @@ public partial class Interactor
                 PlayEquipSFX();
                 break;
             case "MainDoorKey":
-                RoundManager.Instance.CurrentItemState = ItemState.mainDoorKey;
-                RoundManager.Instance.CurrentMainDoorState = MainDoorState.unlocked;
+                gameManager.CurrentItemState = ItemState.mainDoorKey;
+                gameManager.CurrentMainDoorState = MainDoorState.unlocked;
                 taskManager.CompleteTask();
                 mainDoorKey.SetActive(false);
                 keyCounter++;
@@ -189,30 +191,33 @@ public partial class Interactor
                 PlayEquipSFX();
                 break;
             case "Book":
-                RoundManager.Instance.CurrentItemState = ItemState.book;
+                gameManager.CurrentItemState = ItemState.book;
                 cursedBook.SetActive(false);
                 inventory.AddToInventory(0);
                 PlayEquipSFX();
                 break;
             case "Cross":
-                RoundManager.Instance.CurrentItemState = ItemState.cross;
+                gameManager.CurrentItemState = ItemState.cross;
                 cursedCrucifix.SetActive(false);
                 inventory.AddToInventory(2);
                 PlayEquipSFX();
                 break;
             case "Knife":
-                RoundManager.Instance.CurrentItemState = ItemState.knife;
+                gameManager.CurrentItemState = ItemState.knife;
                 cursedKnife.SetActive(false);
                 inventory.AddToInventory(1);
                 PlayEquipSFX();
                 break;
             case "Note":
-                RoundManager.Instance.CurrentMenuState = MenuState.OnNoteMenu;
+                gameManager.CurrentMenuState = MenuState.OnNoteMenu;
                 note.SetActive(false);
                 noteMenu.SetActive(true);
                 inventory.AddToInventory(6);
-                AudioManager.Instance.CollectNote.source.transform.position = AudioManager.Instance.TriggerInteractable3DMusic.transform.position;
-                AudioManager.Instance.PlaySFX(AudioManager.Instance.CollectNote.source, AudioManager.Instance.CollectNote.clip);
+
+                audioManager.CollectNote.source.transform.position = 
+                    audioManager.TriggerInteractable3DMusic.transform.position;
+
+                audioManager.PlaySFX(audioManager.CollectNote.source, audioManager.CollectNote.clip);
                 break;
             case "Table":
                 if (hasBook)
@@ -230,20 +235,23 @@ public partial class Interactor
                     taskManager.CompleteTask();
                     tableKnife.SetActive(true);
                     mainDoorKey.SetActive(true);
-                    AudioManager.Instance.PlaySFX(demonCryAudioSource, demonCryAudioClip);
+                    audioManager.PlaySFX(demonCryAudioSource, demonCryAudioClip);
                     candleLight.SetActive(false);
                     candleSmoke.Play();
                 }
-                AudioManager.Instance.PlaceItem.source.transform.position = AudioManager.Instance.TriggerInteractable3DMusic.transform.position;
-                AudioManager.Instance.PlaySFX(AudioManager.Instance.PlaceItem.source, AudioManager.Instance.PlaceItem.clip);
-                RoundManager.Instance.CurrentItemState = ItemState.none;
+
+                audioManager.PlaceItem.source.transform.position = 
+                    audioManager.TriggerInteractable3DMusic.transform.position;
+
+                audioManager.PlaySFX(audioManager.PlaceItem.source, audioManager.PlaceItem.clip);
+                gameManager.CurrentItemState = ItemState.none;
                 break;
         }
     }
 
     private void PlayLightSFX()
     {
-        AudioManager.Instance.LightSwitches.source.transform.position = AudioManager.Instance.TriggerInteractable3DMusic.transform.position;
-        AudioManager.Instance.PlaySFX(AudioManager.Instance.LightSwitches.source, AudioManager.Instance.LightSwitches.clip);
+        audioManager.LightSwitches.source.transform.position = audioManager.TriggerInteractable3DMusic.transform.position;
+        audioManager.PlaySFX(audioManager.LightSwitches.source, audioManager.LightSwitches.clip);
     }
 }
