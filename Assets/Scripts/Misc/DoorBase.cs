@@ -42,10 +42,7 @@ public class DoorBase : MonoBehaviour, IInteractable
         interactor.HandleInteractableGameObject(this);
     }
 
-    public void Unlock()
-    {
-        currentDoorLockState = DoorLockState.Unlocked;
-    }
+    public void Unlock() => currentDoorLockState = DoorLockState.Unlocked;
 
     public virtual void OnDoorInteract()
     {
