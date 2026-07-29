@@ -18,6 +18,9 @@ public class ClockAudio : MonoBehaviour
 
     private void Start()
     {
+        gameManager = ServiceManager.GetService<GameManager>();
+        audioManager = ServiceManager.GetService<AudioManager>();
+
         audioManager.StopSound(clockAudioSource);
     }
 

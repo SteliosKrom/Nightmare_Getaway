@@ -73,13 +73,7 @@ public partial class Interactor
             return;
         }
 
-        bool isLocked = tag switch
-        {
-            "KidsDoor" => gameManager.CurrentKidsDoorState != KidsDoorState.unlocked,
-            "GarageDoor" => gameManager.CurrentGarageDoorState != GarageDoorState.unlocked,
-            "MainDoor" => gameManager.CurrentMainDoorState != MainDoorState.unlocked,
-            _ => false
-        };
+        bool isLocked = doorBase.IsLocked;
 
         if (isLocked)
         {
@@ -116,142 +110,214 @@ public partial class Interactor
         GameObject obj = interactable.gameObject;
         string tag = obj.tag;
 
-        void PlayEquipSFX()
-        {
-            audioManager.EquipItem.source.transform.position = audioManager.TriggerInteractable3DMusic.transform.position;
-            audioManager.PlaySFX(audioManager.EquipItem.source, audioManager.EquipItem.clip);
-        }
-
-        // The whole switch statement requires refactoring!!!
         switch (tag)
         {
             case "RoomKey":
-                gameManager.CurrentItemState = ItemState.kidsRoomKey;
-                gameManager.CurrentKidsDoorState = KidsDoorState.unlocked;
-                taskManager.CompleteTask();
-                doll.SetActive(true);
-                roomKey.SetActive(false);
-                radioAudioSource.Play();
-                radioAudioLowPassFilter.cutoffFrequency = 3000f;
-                inventory.AddToInventory(4);
-                keyCounter++;
-                keysCounter.text = $"x{keyCounter}";
-                PlayEquipSFX();
+                CollectRoomKey();
                 break;
+
             case "Radio":
-                taskManager.CompleteTask();
-                radioAudioSource.Stop();
-                doorBoxCollider.enabled = false;
-                garageKey.SetActive(true);
-                radioCollider.enabled = false;
+                CollectRadio();
                 break;
+
             case "Telephone":
-                taskManager.CompleteTask();
-                telephoneCollider.enabled = false;
-                telephoneAudioSource.Stop();
-                cursedBook.SetActive(true);
+                CollectTelephone();
                 break;
+
             case "Phone":
-                taskManager.CompleteTask();
-                phone.SetActive(false);
-                creepyEntityTrigger.SetActive(true);
-                creepyEntity.SetActive(true);
-                candleLight.SetActive(true);
-                creepyEntityTriggerObstacle.enabled = true;
-                inventory.AddToInventory(5);
-                PlayEquipSFX();
-                StartCoroutine(HeartbeatAudioDelay());
-                StartCoroutine(PhoneCallDelay());
+                CollectPhone();
                 break;
 
             case "Flashlight":
-                hasFlashlight = true;
-                flashlightObj.SetActive(false);
-                inventory.AddToInventory(3);
-                PlayEquipSFX();
+                CollectFlashlight();
                 break;
+
             case "GarageKey":
-                gameManager.CurrentItemState = ItemState.garageKey;
-                gameManager.CurrentGarageDoorState = GarageDoorState.unlocked;
-                phone.SetActive(true);
-                garageKey.SetActive(false);
-                demonCryCollider.enabled = true;
-                doorKnockTrigger.SetActive(true);
-                keyCounter++;
-                keysCounter.text = $"x{keyCounter}";
-                PlayEquipSFX();
+                CollectGarageKey();
                 break;
+
             case "MainDoorKey":
-                gameManager.CurrentItemState = ItemState.mainDoorKey;
-                gameManager.CurrentMainDoorState = MainDoorState.unlocked;
-                taskManager.CompleteTask();
-                mainDoorKey.SetActive(false);
-                keyCounter++;
-                keysCounter.text = $"x{keyCounter}";
-                PlayEquipSFX();
+                CollectMainDoorKey();
                 break;
+
             case "Book":
-                gameManager.CurrentItemState = ItemState.book;
-                cursedBook.SetActive(false);
-                inventory.AddToInventory(0);
-                PlayEquipSFX();
+                CollectBook();
                 break;
+
             case "Cross":
-                gameManager.CurrentItemState = ItemState.cross;
-                cursedCrucifix.SetActive(false);
-                inventory.AddToInventory(2);
-                PlayEquipSFX();
+                CollectCross();
                 break;
+
             case "Knife":
-                gameManager.CurrentItemState = ItemState.knife;
-                cursedKnife.SetActive(false);
-                inventory.AddToInventory(1);
-                PlayEquipSFX();
+                CollectKnife();
                 break;
+
             case "Note":
-                gameManager.CurrentMenuState = MenuState.OnNoteMenu;
-                note.SetActive(false);
-                noteMenu.SetActive(true);
-                inventory.AddToInventory(6);
-
-                audioManager.CollectNote.source.transform.position = 
-                    audioManager.TriggerInteractable3DMusic.transform.position;
-
-                audioManager.PlaySFX(audioManager.CollectNote.source, audioManager.CollectNote.clip);
+                CollectNote();
                 break;
+
             case "Table":
-                if (hasBook)
-                {
-                    tableBook.SetActive(true);
-                    cursedCrucifix.SetActive(true);
-                }
-                else if (hasCrucifix)
-                {
-                    tableCrucifix.SetActive(true);
-                    cursedKnife.SetActive(true);
-                }
-                else if (hasKnife)
-                {
-                    taskManager.CompleteTask();
-                    tableKnife.SetActive(true);
-                    mainDoorKey.SetActive(true);
-                    audioManager.PlaySFX(demonCryAudioSource, demonCryAudioClip);
-                    candleLight.SetActive(false);
-                    candleSmoke.Play();
-                }
-
-                audioManager.PlaceItem.source.transform.position = 
-                    audioManager.TriggerInteractable3DMusic.transform.position;
-
-                audioManager.PlaySFX(audioManager.PlaceItem.source, audioManager.PlaceItem.clip);
-                gameManager.CurrentItemState = ItemState.none;
+                PlaceItemOnTable(hasBook, hasCrucifix, hasKnife);
                 break;
         }
     }
 
+    private void CollectRoomKey()
+    {
+        gameManager.CurrentItemState = ItemState.kidsRoomKey;
+        taskManager.CompleteTask();
+        doll.SetActive(true);
+        roomKey.SetActive(false);
+        radioAudioSource.Play();
+        radioAudioLowPassFilter.cutoffFrequency = 3000f;
+        inventory.AddToInventory(4);
+        keyCounter++;
+        keysCounter.text = $"x{keyCounter}";
+        PlayEquipSFX();
+    }
+
+    private void CollectGarageKey()
+    {
+        gameManager.CurrentItemState = ItemState.garageKey;
+        phone.SetActive(true);
+        garageKey.SetActive(false);
+        demonCryCollider.enabled = true;
+        doorKnockTrigger.SetActive(true);
+        keyCounter++;
+        keysCounter.text = $"x{keyCounter}";
+        PlayEquipSFX();
+    }
+
+    private void CollectMainDoorKey()
+    {
+        gameManager.CurrentItemState = ItemState.mainDoorKey;
+        taskManager.CompleteTask();
+        mainDoorKey.SetActive(false);
+        keyCounter++;
+        keysCounter.text = $"x{keyCounter}";
+        PlayEquipSFX();
+    }
+
+    private void CollectBook()
+    {
+        gameManager.CurrentItemState = ItemState.book;
+        cursedBook.SetActive(false);
+        inventory.AddToInventory(0);
+        PlayEquipSFX();
+    }
+
+    private void CollectCross()
+    {
+        gameManager.CurrentItemState = ItemState.cross;
+        cursedCrucifix.SetActive(false);
+        inventory.AddToInventory(2);
+        PlayEquipSFX();
+    }
+
+    private void CollectKnife()
+    {
+        gameManager.CurrentItemState = ItemState.knife;
+        cursedKnife.SetActive(false);
+        inventory.AddToInventory(1);
+        PlayEquipSFX();
+    }
+
+    private void CollectNote()
+    {
+        gameManager.CurrentMenuState = MenuState.OnNoteMenu;
+        note.SetActive(false);
+        noteMenu.SetActive(true);
+        inventory.AddToInventory(6);
+
+        audioManager.CollectNote.source.transform.position =
+            audioManager.TriggerInteractable3DMusic.transform.position;
+
+        audioManager.PlaySFX(audioManager.CollectNote.source, audioManager.CollectNote.clip);
+    }
+
+    private void CollectPhone()
+    {
+        taskManager.CompleteTask();
+        phone.SetActive(false);
+        creepyEntityTrigger.SetActive(true);
+        creepyEntity.SetActive(true);
+        candleLight.SetActive(true);
+        creepyEntityTriggerObstacle.enabled = true;
+
+        inventory.AddToInventory(5);
+        PlayEquipSFX();
+
+        StartCoroutine(HeartbeatAudioDelay());
+        StartCoroutine(PhoneCallDelay());
+    }
+
+    private void CollectFlashlight()
+    {
+        hasFlashlight = true;
+        flashlightObj.SetActive(false);
+        inventory.AddToInventory(3);
+        PlayEquipSFX();
+    }
+
+    private void CollectTelephone()
+    {
+        taskManager.CompleteTask();
+        telephoneCollider.enabled = false;
+        telephoneAudioSource.Stop();
+        cursedBook.SetActive(true);
+    }
+
+    private void CollectRadio()
+    {
+        taskManager.CompleteTask();
+        radioAudioSource.Stop();
+        doorBoxCollider.enabled = false;
+        garageKey.SetActive(true);
+        radioCollider.enabled = false;
+    }
+
+    private void PlaceItemOnTable(bool hasBook, bool hasCrucifix, bool hasKnife)
+    {
+        if (hasBook)
+        {
+            tableBook.SetActive(true);
+            cursedCrucifix.SetActive(true);
+        }
+        else if (hasCrucifix)
+        {
+            tableCrucifix.SetActive(true);
+            cursedKnife.SetActive(true);
+        }
+        else if (hasKnife)
+        {
+            taskManager.CompleteTask();
+
+            tableKnife.SetActive(true);
+            mainDoorKey.SetActive(true);
+
+            audioManager.PlaySFX(demonCryAudioSource, demonCryAudioClip);
+            candleLight.SetActive(false);
+            candleSmoke.Play();
+        }
+
+        audioManager.PlaceItem.source.transform.position =
+            audioManager.TriggerInteractable3DMusic.transform.position;
+
+        audioManager.PlaySFX(audioManager.PlaceItem.source, audioManager.PlaceItem.clip);
+        gameManager.CurrentItemState = ItemState.none;
+    }
+
     private void PlayLightSFX()
     {
-        audioManager.LightSwitches.source.transform.position = audioManager.TriggerInteractable3DMusic.transform.position;
+        audioManager.LightSwitches.source.transform.position = 
+            audioManager.TriggerInteractable3DMusic.transform.position;
+
         audioManager.PlaySFX(audioManager.LightSwitches.source, audioManager.LightSwitches.clip);
+    }
+
+    void PlayEquipSFX()
+    {
+        audioManager.EquipItem.source.transform.position = audioManager.TriggerInteractable3DMusic.transform.position;
+        audioManager.PlaySFX(audioManager.EquipItem.source, audioManager.EquipItem.clip);
     }
 }

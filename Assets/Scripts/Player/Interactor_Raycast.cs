@@ -41,13 +41,7 @@ public partial class Interactor
 
         if (hit.collider.TryGetComponent(out DoorBase door))
         {
-            bool isLocked = door.tag switch
-            {
-                "KidsDoor" => gameManager.CurrentKidsDoorState != KidsDoorState.unlocked,
-                "GarageDoor" => gameManager.CurrentGarageDoorState != GarageDoorState.unlocked,
-                "MainDoor" => gameManager.CurrentMainDoorState != MainDoorState.unlocked,
-                _ => false
-            };
+            bool isLocked = door.IsLocked;
 
             if (isLocked)
                 HUD.Instance.ShowLockedOnly();

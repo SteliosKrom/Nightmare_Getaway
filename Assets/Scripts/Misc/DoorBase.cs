@@ -8,11 +8,11 @@ public class DoorBase : MonoBehaviour, IInteractable
     public string idleParameter;
 
     private bool canInteract = true;
-    private bool isLocked = false;
 
     private float interactioDelay = 1f;
 
-    public DoorStates currentDoorState;
+    [SerializeField] private DoorStates currentDoorState;
+    [SerializeField] private DoorLockState currentDoorLockState = DoorLockState.Locked;
 
     #region SERVICES
     private AudioManager audioManager;
@@ -23,6 +23,9 @@ public class DoorBase : MonoBehaviour, IInteractable
     public Animator doorAnimator;
     #endregion
 
+    #region PROPERTIES
+    public bool IsLocked => currentDoorLockState == DoorLockState.Locked;
+    #endregion
     public void Start()
     {
         audioManager = ServiceManager.GetService<AudioManager>();
@@ -39,12 +42,17 @@ public class DoorBase : MonoBehaviour, IInteractable
         interactor.HandleInteractableGameObject(this);
     }
 
+    public void Unlock()
+    {
+        currentDoorLockState = DoorLockState.Unlocked;
+    }
+
     public virtual void OnDoorInteract()
     {
         if (!canInteract)
             return;
 
-        if (isLocked)
+        if (IsLocked)
             return;
 
         canInteract = false;

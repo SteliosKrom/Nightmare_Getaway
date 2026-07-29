@@ -101,6 +101,8 @@ public class MainMenuUIManager : MonoBehaviour
     private void Start()
     {
         audioManager = ServiceManager.GetService<AudioManager>();
+        settingsUIManager = ServiceManager.GetService<SettingsUIManager>();
+        gameManager = ServiceManager.GetService<GameManager>();
 
         Time.timeScale = 1f;
 

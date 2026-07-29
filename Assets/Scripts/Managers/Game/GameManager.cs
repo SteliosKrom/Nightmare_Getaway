@@ -1,26 +1,5 @@
 using UnityEngine;
 
-
-// Just add is locked boolean variable to the door class and control the state for each door seperately
-// ... My eyes hurt!!
-public enum KidsDoorState
-{
-    unlocked,
-    locked
-}
-
-public enum GarageDoorState
-{
-    unlocked,
-    locked
-}
-
-public enum MainDoorState
-{
-    unlocked,
-    locked
-}
-
 public class GameManager : MonoBehaviour
 {
     #region STATES
@@ -30,9 +9,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerState currentPlayerState;
     [SerializeField] private EnvironmentState currentEnvironmentState;
     [SerializeField] private ItemState currentItemState;
-    [SerializeField] private KidsDoorState currentKidsDoorState;
-    [SerializeField] private GarageDoorState currentGarageDoorState;
-    [SerializeField] private MainDoorState currentMainDoorState;
     #endregion
 
     #region PROPERTIES
@@ -45,13 +21,6 @@ public class GameManager : MonoBehaviour
         set => currentEnvironmentState = value;
     }
     public ItemState CurrentItemState { get => currentItemState; set => currentItemState = value; }
-    public KidsDoorState CurrentKidsDoorState { get => currentKidsDoorState; set => currentKidsDoorState = value; }
-    public GarageDoorState CurrentGarageDoorState 
-    { 
-        get => currentGarageDoorState; 
-        set => currentGarageDoorState = value; 
-    }
-    public MainDoorState CurrentMainDoorState { get => currentMainDoorState; set => currentMainDoorState = value; }
     #endregion
     private void Awake()
     {
@@ -61,16 +30,12 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // Change game state to none later
-        currentGameState = GameState.None;
-        currentMenuState = MenuState.OnTitleMenu; // Change this to none later
+        CurrentGameState = GameState.None;
+        CurrentMenuState = MenuState.OnTitleMenu; // Change this to none later
 
-        currentPlayerState = PlayerState.OnIdle;
-        currentEnvironmentState = EnvironmentState.none;
-        currentItemState = ItemState.none;
-
-        currentKidsDoorState = KidsDoorState.locked;
-        currentGarageDoorState = GarageDoorState.locked;
-        currentMainDoorState = MainDoorState.locked;
+        CurrentPlayerState = PlayerState.OnIdle;
+        CurrentEnvironmentState = EnvironmentState.none;
+        CurrentItemState = ItemState.none;
     }
 }
 
