@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
@@ -43,14 +42,12 @@ public class SettingsManager : MonoBehaviour
     [SerializeField] private Slider gameVolumeSlider;
     [SerializeField] private Slider sfxVolumeSlider;
     [SerializeField] private Slider menuVolumeSlider;
-    [SerializeField] private Slider gammaSlider;
 
     [Header("DROPDOWN")]
     [SerializeField] private TMP_Dropdown antiAliasingDropdown;
     [SerializeField] private TMP_Dropdown qualityDropdown;
 
     [Header("TEXT")]
-    [SerializeField] private TextMeshProUGUI gammaValueText;
     [SerializeField] private TextMeshProUGUI masterValueText;
     [SerializeField] private TextMeshProUGUI sfxValueText;
     [SerializeField] private TextMeshProUGUI menuValueText;
@@ -176,7 +173,6 @@ public class SettingsManager : MonoBehaviour
 
         // Sliders
         cameraRotate.SensitivitySlider = savedSensitivityValue;
-        gammaSlider.value = savedSliderGammaValue;
 
         // Toggles
         fullscreenToggle.isOn = savedFullscreenValue;
@@ -350,21 +346,20 @@ public class SettingsManager : MonoBehaviour
     {
         defaultUniversalPipelineAsset = GraphicsSettings.currentRenderPipeline as UniversalRenderPipelineAsset;
 
-        if (antiAliasingDropdown.value == 0)
+        switch (antiAliasingDropdown.value)
         {
-            defaultUniversalPipelineAsset.msaaSampleCount = 1;
-        }
-        else if (antiAliasingDropdown.value == 1)
-        {
-            defaultUniversalPipelineAsset.msaaSampleCount = 2;
-        }
-        else if (antiAliasingDropdown.value == 2)
-        {
-            defaultUniversalPipelineAsset.msaaSampleCount = 4;
-        }
-        else if (antiAliasingDropdown.value == 3)
-        {
-            defaultUniversalPipelineAsset.msaaSampleCount = 8;
+            case 0:
+                defaultUniversalPipelineAsset.msaaSampleCount = 1;
+                break;
+            case 1:
+                defaultUniversalPipelineAsset.msaaSampleCount = 2;
+                break;
+            case 2:
+                defaultUniversalPipelineAsset.msaaSampleCount = 4;
+                break;
+            case 3:
+                defaultUniversalPipelineAsset.msaaSampleCount = 8;
+                break;
         }
         PlayerPrefs.SetInt("AntiAlias", defaultUniversalPipelineAsset.msaaSampleCount);
         PlayerPrefs.SetInt("AntiAliasValue", antiAliasingDropdown.value);
@@ -405,23 +400,6 @@ public class SettingsManager : MonoBehaviour
         PlayerPrefs.SetInt("AntiAlias", defaultUniversalPipelineAsset.msaaSampleCount);
         PlayerPrefs.SetInt("AntiAliasValue", antiAliasingDropdown.value);
         PlayerPrefs.SetInt("GraphicsQuality", qualityValue);
-    }
-
-    public void SetBrightness()
-    {
-        float savedSliderValue = gammaSlider.value;
-        float exposure = Mathf.Lerp(-4.5f, 0f, savedSliderValue);
-
-        gammaValueText.text = Mathf.RoundToInt(savedSliderValue * 100f) + "%";
-
-        if (mainCameraVolume.profile.TryGet(out mainCameraVolumeColorAdjustment))
-            mainCameraVolumeColorAdjustment.postExposure.value = exposure;
-
-        if (secondaryCameraVolume.profile.TryGet(out secondaryCameraVolumeColorAdjustment))
-            secondaryCameraVolumeColorAdjustment.postExposure.value = exposure;
-
-        PlayerPrefs.SetFloat("GammaSliderValue", savedSliderValue);
-        PlayerPrefs.SetFloat("ActualGammaExposureValue", exposure);
     }
 
     public void SetFPS()

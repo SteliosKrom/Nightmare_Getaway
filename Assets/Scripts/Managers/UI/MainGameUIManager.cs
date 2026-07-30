@@ -35,7 +35,6 @@ public class MainGameUIManager : MonoBehaviour
     #region UI PANELS
     [Header("MENUS & PANELS")]
     [SerializeField] private GameObject mainMenu;
-    [SerializeField] private Slider gammaSlider;
     [SerializeField] private TextMeshProUGUI[] pauseButtonText;
     [SerializeField] private Button[] itemButtons;
     #endregion
@@ -63,8 +62,6 @@ public class MainGameUIManager : MonoBehaviour
     [Header("POST-PROCESSING")]
     [SerializeField] private Volume mainCameraVolume;
     [SerializeField] private Volume secondaryCameraVolume;
-    private ColorAdjustments mainCameraColorAdjustments;
-    private ColorAdjustments secondaryCameraColorAdjustments;
 
     [Header("CAMERA")]
     [SerializeField] private GameObject mainCameraObj;
@@ -83,7 +80,7 @@ public class MainGameUIManager : MonoBehaviour
         {
             if (audioManager.HeartbeatAudioSource.isPlaying)
             {
-                audioManager.MainGameAudioSource.volume = 
+                audioManager.MainGameAudioSource.volume =
                     Mathf.Lerp(audioManager.MainGameAudioSource.volume, 0.025f, 2f * Time.deltaTime);
             }
         }
@@ -153,7 +150,7 @@ public class MainGameUIManager : MonoBehaviour
         DisableRedColorTextFromPauseButtons();
 
         Time.timeScale = 1f;
-       gameManager.CurrentMenuState = MenuState.OnMainMenu;
+        gameManager.CurrentMenuState = MenuState.OnMainMenu;
     }
 
     public void ExitButton()

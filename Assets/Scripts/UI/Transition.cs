@@ -7,7 +7,6 @@ public class Transition : MonoBehaviour
     private float splashScreenDelay = 6f;
     private float titleMenuAnimationsDelay = 2f;
 
-    private bool isOnBrightnessPanel = true;
     public bool mainGameHasLoaded = false;
 
     #region SERVICES
@@ -18,8 +17,6 @@ public class Transition : MonoBehaviour
     [Header("OBJECTS")]
     [SerializeField] private GameObject headsetPanel;
     [SerializeField] private GameObject seizurePanel;
-    [SerializeField] private GameObject brightnessCalibrationPanelLogo;
-    [SerializeField] private GameObject brightnessCalibrationPanelUI;
     #endregion
 
     #region ANIMATIONS
@@ -46,7 +43,6 @@ public class Transition : MonoBehaviour
         gameManager = ServiceManager.GetService<GameManager>();
 
         mainGameHasLoaded = false;
-        isOnBrightnessPanel = false;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -54,24 +50,8 @@ public class Transition : MonoBehaviour
         StartCoroutine(ShowSplashScreens());
     }
 
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.Space) && isOnBrightnessPanel)
-        {
-            isOnBrightnessPanel = false;
-            LoadGame();
-        }
-    }
+    private void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
+    private void OnDisable() => SceneManager.sceneLoaded -= OnSceneLoaded;
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -79,10 +59,6 @@ public class Transition : MonoBehaviour
         {
             InitializeAnimatorComponents();
             StartCoroutine(TitleMenuAnimationDelay());
-        }
-        else
-        {
-            return;
         }
     }
 
@@ -115,36 +91,18 @@ public class Transition : MonoBehaviour
         LoadSeizureWarningPanel();
         yield return new WaitForSeconds(splashScreenDelay);
         LoadHeadsetPanel();
-        yield return new WaitForSeconds(splashScreenDelay);
-        LoadBrightnessCalibrationPanel();
     }
 
     public void LoadHeadsetPanel()
     {
         headsetPanel.SetActive(true);
         seizurePanel.SetActive(false);
-        brightnessCalibrationPanelLogo.SetActive(false);
-        brightnessCalibrationPanelUI.SetActive(false);
     }
 
     public void LoadSeizureWarningPanel()
     {
         headsetPanel.SetActive(false);
         seizurePanel.SetActive(true);
-        brightnessCalibrationPanelLogo.SetActive(false);
-        brightnessCalibrationPanelUI.SetActive(false);
-    }
-
-    public void LoadBrightnessCalibrationPanel()
-    {
-        isOnBrightnessPanel = true;
-        headsetPanel.SetActive(false);
-        seizurePanel.SetActive(false);
-        brightnessCalibrationPanelLogo.SetActive(true);
-        brightnessCalibrationPanelUI.SetActive(true);
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        BrightnessManager.Instance.LoadLogoGammaCorrection();
     }
 
     public void LoadGame()
